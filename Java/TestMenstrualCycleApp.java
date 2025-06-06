@@ -66,6 +66,13 @@ public class TestMenstrualCycleApp{
 		assertEquals(expected, actual);
 
 	}
+	@Test
+	void testNextPeriodStartDateReturnsCorrectDate(){
+		actual = MenstrualCycleApp.nextPeriodStartDate(month,day,months);
+		expected = "Your next period begins on July 1";
+		assertEquals(expected, actual);
+
+	}
 	
 
 
