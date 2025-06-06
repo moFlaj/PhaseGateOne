@@ -19,7 +19,7 @@ public class MenstrualCycleApp{
 			}
 
 			if(!month.matches("-?\\d+") && months.contains(month)){
-				flowDates = "Your period will likely last from " + month + " " + convertToInteger + "to" + month + " " + ((convertToInteger + averageOfFlowDays) - 1);
+				flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " + month + " " + ((convertToInteger + averageOfFlowDays) - 1);
 
 			}
 
