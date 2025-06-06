@@ -59,6 +59,13 @@ public class TestMenstrualCycleApp{
 
 
 	}
+	@Test
+	void testPeriodFlowDateShowsHowLongFlowDaysMayLatIfRequiredInformationIsProvided(){
+		actual = MenstrualCycleApp.periodFlowDates(month,day,months);
+		expected =  "Your period will likely last from June 3 to June 7";
+		assertEquals(expected, actual);
+
+	}
 	
 
 
