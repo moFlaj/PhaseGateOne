@@ -56,8 +56,14 @@ public class TestMenstrualCycleApp{
 		}
 		expected = "For input string: \"REYYD\"";
 		assertEquals(expected, actual);
+	}
 
-
+	@Test
+	void testPerioFlowDatesThrowsErrorIfDayEnteredExceedsNumberOfDaysInChosenMonth(){
+		day = "30";
+		assertThrows(IllegalArgumentException.class, () -> {
+			MenstrualCycleApp.periodFlowDates(month,day,months);
+		});
 	}
 
 	@Test
