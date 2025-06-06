@@ -38,15 +38,46 @@ public class MenstrualCycleApp{
 
 	public static String periodFlowDates(String month, String day, List<String> months){
 		throwErrorsForInvalidData(month,day,months);
+		List<String> monthsOfThirtyDays = List.of("September", "April", "June", "November");
+		List<String> monthsOfThirtyOneDays = List.of("January", "March", "May", "July", "August", "October", "December");
+		List<String> monthsOfTwentyEightDays = List.of("February");
+
 		String flowDates = "";
 		int convertToInteger = Integer.parseInt(day);
-
+		
 //Flow days in women lasts around 3 - 7 days.
-
 		int averageOfFlowDays = (3 + 7)/2;
 
+		throwErrorsIfDayExceedsNumberOfDaysInAParticularMonth(month,day);
+		if(monthsOfThirtyDays.contains(month)){
+			if(convertToInteger + averageOfFlowDays > 30){
 
-		flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " + month + " " + ((convertToInteger + averageOfFlowDays) - 1);
+				flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + averageOfFlowDays) - 31);
+			}
+			else{
+				flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " +  month + " " + ((convertToInteger + averageOfFlowDays) - 1);
+			}
+		}
+
+		else if(monthsOfThirtyOneDays.contains(month)){
+			if(convertToInteger + averageOfFlowDays > 31){
+
+				flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + averageOfFlowDays) - 32);
+			}
+			else{
+				flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " +  month + " " + ((convertToInteger + averageOfFlowDays) - 1);
+			}
+		}
+
+		else if(monthsOfTwentyEightDays.contains(month)){
+			if(convertToInteger + averageOfFlowDays > 28){
+
+				flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + averageOfFlowDays) - 29);
+			}
+			else{
+				flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " +  month + " " + ((convertToInteger + averageOfFlowDays) - 1);
+			}
+		}
 
 		return flowDates;
 
