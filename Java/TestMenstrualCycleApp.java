@@ -18,7 +18,7 @@ public class TestMenstrualCycleApp{
 
 	@BeforeEach
 	void setUp(){
-		month = "June";
+		month = "February";
 		day = "3";
 		months = List.of("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
@@ -59,30 +59,33 @@ public class TestMenstrualCycleApp{
 
 
 	}
+
 	@Test
 	void testPeriodFlowDateShowsHowLongFlowDaysMayLatIfRequiredInformationIsProvided(){
 		actual = MenstrualCycleApp.periodFlowDates(month,day,months);
-		expected =  "Your period will likely last from June 3 to June 7";
+		expected =  "Your period will likely last from February 3 to February 7";
 		assertEquals(expected, actual);
 
 	}
+
 	@Test
 	void testNextPeriodStartDateReturnsCorrectDateIfNextPeriodWillBeginInTheUpcomingMonth(){
 		actual = MenstrualCycleApp.nextPeriodStartDate(month,day,months);
-		expected = "Your next period begins on July 1";
+		expected = "Your next period begins on March 3";
 		assertEquals(expected, actual);
 
 	}
 
 	@Test
-	void testNextPeriodStartDateReturnsCorrectDateIfNextPeriodWillBeginInTheSameMonthAsPrevious(){
+	void testNextPeriodStartDateReturnsCorrectDateIfNextPeriodWillBeginInTheSameMonthAsPreviousAndMonthIsNotFebruary(){
+		month = "June";
 		day = "1";
 		actual = MenstrualCycleApp.nextPeriodStartDate(month,day,months);
 		expected = "Your next period begins on June 29";
 		assertEquals(expected, actual);
 
 	}
-	
+
 
 
 
