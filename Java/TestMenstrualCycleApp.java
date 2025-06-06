@@ -67,20 +67,22 @@ public class TestMenstrualCycleApp{
 
 	}
 	@Test
-	void testNextPeriodStartDateReturnsCorrectDate(){
+	void testNextPeriodStartDateReturnsCorrectDateIfNextPeriodWillBeginInTheUpcomingMonth(){
 		actual = MenstrualCycleApp.nextPeriodStartDate(month,day,months);
 		expected = "Your next period begins on July 1";
 		assertEquals(expected, actual);
 
 	}
+
+	@Test
+	void testNextPeriodStartDateReturnsCorrectDateIfNextPeriodWillBeginInTheSameMonthAsPrevious(){
+		day = "1";
+		actual = MenstrualCycleApp.nextPeriodStartDate(month,day,months);
+		expected = "Your next period begins on June 29";
+		assertEquals(expected, actual);
+
+	}
 	
-
-
-
-
-
-
-
 
 
 
