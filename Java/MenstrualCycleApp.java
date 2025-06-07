@@ -41,7 +41,7 @@ public class MenstrualCycleAppMod{
 
 		throwErrorsIfDateInputIsInvalid(dateOfFirstFlow);
 
-		return "Your period will likely last from " + returnDayOfWeek(dateOfFirstFlow) + ", " + formatDate(dateOfFirstFlow) + " to " + returnDayOfWeek(formatDate(dateOfFirstFlow).plusDays(averageOfFlowDays).toString()) + ", " + formatDate(dateOfFirstFlow).plusDays(averageOfFlowDays)  + ".";
+		return "Your current period flow will last from " + returnDayOfWeek(dateOfFirstFlow) + ", " + formatDate(dateOfFirstFlow) + " to " + returnDayOfWeek(formatDate(dateOfFirstFlow).plusDays(averageOfFlowDays).toString()) + ", " + formatDate(dateOfFirstFlow).plusDays(averageOfFlowDays)  + ".";
 
 	}
 
