@@ -61,4 +61,15 @@ public class MenstrualCycleAppMod{
 
 		return "Ovulation day of current period is " + returnDayOfWeek(dateOfNextPeriod.minusDays(ovulationDay).toString()) + ", " + dateOfNextPeriod.minusDays(ovulationDay) + ".";
 	}
+
+	public static String identifyFertileWindow(LocalDate ovulationDay){
+
+		throwErrorsIfDateInputIsInvalid(ovulationDay.toString());
+//Fertile window is five days before ovulation day and one day after
+
+		int fertileWindowBefore = 5;
+		int fertileWindowAfter = 1;
+
+		return "Fertile window will start on " + returnDayOfWeek(ovulationDay.minusDays(fertileWindowBefore).toString()) + ", " + ovulationDay.minusDays(fertileWindowBefore) + ", to end on " + returnDayOfWeek(ovulationDay.plusDays(fertileWindowAfter).toString()) + ", " + ovulationDay.plusDays(fertileWindowAfter) + ".";
+	}
 }
