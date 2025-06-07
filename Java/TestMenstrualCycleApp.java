@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -31,7 +32,7 @@ public class TestMenstrualCycleAppMod{
 	@Test
 	void testPeriodFlowDaysReturnsCorrectDateIfFlowSpansFromCurrentMonthToTheNextMonthOfSameYear(){
 		actual = MenstrualCycleAppMod.periodFlowDays(inputDate, numberOfFlowDays);
-		expected = "Your period will likely last from Sunday, 2025-06-29 to Friday, 2025-07-04.";
+		expected = "Your current period flow will last from Sunday, 2025-06-29 to Friday, 2025-07-04.";
 		assertEquals(expected, actual);
 	}
 
@@ -39,7 +40,7 @@ public class TestMenstrualCycleAppMod{
 	void testPeriodFlowDaysReturnsCorrectDateIfFlowSpansFromCurrentMonthToTheNextMonthOfDifferentYear(){
 		inputDate = "2025-12-29";
 		actual = MenstrualCycleAppMod.periodFlowDays(inputDate, numberOfFlowDays);
-		expected = "Your period will likely last from Monday, 2025-12-29 to Saturday, 2026-01-03.";
+		expected = "Your current period flow will last from Monday, 2025-12-29 to Saturday, 2026-01-03.";
 		assertEquals(expected, actual);
 	}
 
