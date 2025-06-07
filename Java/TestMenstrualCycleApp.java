@@ -96,4 +96,13 @@ public class TestMenstrualCycleAppMod{
 		expected = "Ovulation day of current period is Sunday, 2025-07-13. Fertile window will start on Tuesday, 2025-07-08, to end on Monday, 2025-07-14.";
 		assertEquals(expected, actual);
 	}
+
+	@Test
+	void testSafePeriodsSpansFromFirstDayOfFlowToDayBeforeStartOfFertileWindowAndContinuesAfterWindowEndsToDayBeforeStartOfNextPeriod(){
+		LocalDate nextPeriodStartDate = LocalDate.parse(inputDate).plusDays(cycleLength);
+		LocalDate ovulationDate = nextPeriodStartDate.minusDays(14);
+		actual = MenstrualCycleAppMod.markSafePeriods(inputDate, ovulationDate, nextPeriodStartDate);
+		expected = "Your safe period is from Sunday, 2025-06-29 to Monday, 2025-07-07 and from Tuesday, 2025-07-15 to Saturday, 2025-07-26.";
+		assertEquals(expected, actual);
+	}
 }
