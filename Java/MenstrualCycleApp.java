@@ -1,341 +1,36 @@
-import java.util.InputMismatchException;
-import java.util.List;
-public class MenstrualCycleApp{
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
+public class MenstrualCycleAppMod{
 
-	public static void throwErrorsForInvalidData(String month, String day, List<String> months){
-		if(month.matches("-?\\d+")){
-			throw new InputMismatchException("Invalid input. Please enter a string.");
-		}
+	public static String periodFlowDays(String dateOfFirstFlow){
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		try{
+			LocalDate date = LocalDate.parse(dateOfFirstFlow, formatter);
+// To make sure input is of the format specified is why the "formatter" object is part of the arguments passed.
 
-		if(!months.contains(month)){
-			throw new IllegalArgumentException("Month input is not valid. Try again");
-		}
+			String dayOfWeekOfStartOfFlow = date.getDayOfWeek().toString();
+// Found out getDayOfWeek() returns an enum type.
 
-		if(Integer.parseInt(day) < 1 || Integer.parseInt(day) > 31){
-			throw new IllegalArgumentException("Enter a valid number");
-		}
+			String capitalizeFirstLetterOfStartDay = dayOfWeekOfStartOfFlow.substring(0,1).toUpperCase() + dayOfWeekOfStartOfFlow.substring(1).toLowerCase();
 
+			int averageOfFlowDays = (3 + 7)/2;
+// Flow days in women lasts around 3 - 7 days.
 
-	}
+			LocalDate newDate = date.plusDays(averageOfFlowDays);
+			String dayOfWeekOfEndOfFlow = newDate.getDayOfWeek().toString();
+			String capitalizeFirstLetterOfEndDay = dayOfWeekOfEndOfFlow.substring(0,1).toUpperCase() + dayOfWeekOfEndOfFlow.substring(1).toLowerCase();
 
-	public static void throwErrorsIfDayExceedsNumberOfDaysInAParticularMonth(String month, String day){
-		List<String> monthsOfThirtyDays = List.of("September", "April", "June", "November");
-		List<String> monthsOfThirtyOneDays = List.of("January", "March", "May", "July", "August", "October", "December");
-		List<String> monthsOfTwentyEightDays = List.of("February");
+			return "Your period will likely last from " + capitalizeFirstLetterOfStartDay + ", " + date + " to " + capitalizeFirstLetterOfEndDay + ", " + newDate.format(formatter) + ".";
 
-		if(monthsOfThirtyDays.contains(month) && Integer.parseInt(day) > 30){
-			throw new IllegalArgumentException(month + " has only thirty days.");
+		}catch(DateTimeParseException invalidDate){
 
-		}
-		else if(monthsOfTwentyEightDays.contains(month) && Integer.parseInt(day) > 28){
-			throw new IllegalArgumentException(month + " has only twenty eight days.");
+//Throws error if input format is invalid. This can also be made more strict using the Pattern and Matcher classes.
 
-		}
-
-
-	}
-
-	public static String periodFlowDates(String month, String day, List<String> months){
-		throwErrorsForInvalidData(month,day,months);
-		List<String> monthsOfThirtyDays = List.of("September", "April", "June", "November");
-		List<String> monthsOfThirtyOneDays = List.of("January", "March", "May", "July", "August", "October", "December");
-		List<String> monthsOfTwentyEightDays = List.of("February");
-
-		String flowDates = "";
-		int convertToInteger = Integer.parseInt(day);
-		
-//Flow days in women lasts around 3 - 7 days.
-		int averageOfFlowDays = (3 + 7)/2;
-
-		throwErrorsIfDayExceedsNumberOfDaysInAParticularMonth(month,day);
-		if(monthsOfThirtyDays.contains(month)){
-			if(convertToInteger + averageOfFlowDays > 30){
-
-				flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + averageOfFlowDays) - 31);
-			}
-			else{
-				flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " +  month + " " + ((convertToInteger + averageOfFlowDays) - 1);
-			}
-		}
-
-		else if(monthsOfThirtyOneDays.contains(month)){
-			if(convertToInteger + averageOfFlowDays > 31){
-
-				flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + averageOfFlowDays) - 32);
-			}
-			else{
-				flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " +  month + " " + ((convertToInteger + averageOfFlowDays) - 1);
-			}
-		}
-
-		else if(monthsOfTwentyEightDays.contains(month)){
-			if(convertToInteger + averageOfFlowDays > 28){
-
-				flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + averageOfFlowDays) - 29);
-			}
-			else{
-				flowDates = "Your period will likely last from " + month + " " + convertToInteger + " to " +  month + " " + ((convertToInteger + averageOfFlowDays) - 1);
-			}
-		}
-
-		return flowDates;
-
-	}
-
-
-	public static String nextPeriodStartDate(String month, String day, List<String> months){
-		throwErrorsForInvalidData(month,day,months);
-		List<String> monthsOfThirtyDays = List.of("September", "April", "June", "November");
-		List<String> monthsOfThirtyOneDays = List.of("January", "March", "May", "July", "August", "October", "December");
-		List<String> monthsOfTwentyEightDays = List.of("February");
-		int cycleLength = 28;
-//Average of period cycle length is 28 days.
-
-		String nextPeriodStartSate = "";
-		int convertToInteger = Integer.parseInt(day);
-		throwErrorsIfDayExceedsNumberOfDaysInAParticularMonth(month,day);
-		if(monthsOfThirtyDays.contains(month)){
-			if(convertToInteger + cycleLength > 30){
-				nextPeriodStartSate = "Your next period begins on " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + cycleLength) - 30);
-			}
-			else{
-				nextPeriodStartSate = "Your next period begins on " + month + " " + (convertToInteger + cycleLength);
-
-			}
+			throw new IllegalArgumentException("Invalid date format or values. Expected format: YYYY-MM-DD.");
 
 		}
-		else if(monthsOfThirtyOneDays.contains(month)){
-			if(convertToInteger + cycleLength > 31){
-				nextPeriodStartSate = "Your next period begins on " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + cycleLength) - 31);
-			}
-			else{
-				nextPeriodStartSate = "Your next period begins on " + month + " " + (convertToInteger + cycleLength);
-
-			}
-			
-
-		}
-		else if(monthsOfTwentyEightDays.contains(month)){
-			if(convertToInteger + cycleLength > 28){
-				nextPeriodStartSate = "Your next period begins on " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + cycleLength) - 28);
-			}
-			else{
-				nextPeriodStartSate = "Your next period begins on " + month + " " + (convertToInteger + cycleLength);
-
-			}
-		}
-		return nextPeriodStartSate;
-
-
-	}
-
-	public static String findOvulationDay(String month, String day, List<String> months){
-
-		throwErrorsForInvalidData(month,day,months);
-//Ovulation day occurs 14 days before next next period date
-		int calcOvDate = 14;
-		List<String> monthsOfThirtyDays = List.of("September", "April", "June", "November");
-		List<String> monthsOfThirtyOneDays = List.of("January", "March", "May", "July", "August", "October", "December");
-		List<String> monthsOfTwentyEightDays = List.of("February");
-		String ovulationDate = "";
-		int convertToInteger = Integer.parseInt(day);
-		throwErrorsIfDayExceedsNumberOfDaysInAParticularMonth(month,day);
-		if(monthsOfThirtyDays.contains(month)){
-			if(convertToInteger + calcOvDate > 30){
-				ovulationDate = "Your ovulation day is " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + calcOvDate) - 30);
-			}
-			else{
-				ovulationDate = "Your ovulation day is " + month + " " + (convertToInteger + calcOvDate);
-
-			}
-
-		}
-		else if(monthsOfThirtyOneDays.contains(month)){
-			if(convertToInteger + calcOvDate > 31){
-				ovulationDate = "Your ovulation day is " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + calcOvDate) - 31);
-			}
-			else{
-				ovulationDate = "Your ovulation day is " + month + " " + (convertToInteger + calcOvDate);
-
-			}
-			
-
-		}
-		else if(monthsOfTwentyEightDays.contains(month)){
-			if(convertToInteger + calcOvDate > 28){
-				ovulationDate = "Your ovulation day is " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + calcOvDate) - 28);
-			}
-			else{
-				ovulationDate = "Your ovulation day is " + month + " " + (convertToInteger + calcOvDate);
-
-			}
-		}
-
-		return ovulationDate;
-
-
-	}
-
-	public static String identifyFertileWindow(String month, String day, List<String> months){
-		throwErrorsForInvalidData(month,day,months);
-//Fertile window is five days before ovulation day and one day after
-//If ovulation day is fourteen days after first flow, then fertile window before ovulation day is 14 - 5, and end of fertile window is 14 + 1
-
-		int fertileWindowBefore = 9;
-		int fertileWindowAfter = 15;
-		List<String> monthsOfThirtyDays = List.of("September", "April", "June", "November");
-		List<String> monthsOfThirtyOneDays = List.of("January", "March", "May", "July", "August", "October", "December");
-		List<String> monthsOfTwentyEightDays = List.of("February");
-
-		String fertileWindow = "";
-		int convertToInteger = Integer.parseInt(day);
-
-		throwErrorsIfDayExceedsNumberOfDaysInAParticularMonth(month,day);
-
-		if(monthsOfThirtyDays.contains(month)){
-			if(convertToInteger + fertileWindowBefore > 30 && convertToInteger + fertileWindowAfter > 30){
-				fertileWindow = "Fertile window will likely start on " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowBefore) - 30) + ", to end on " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowAfter) - 30);
-			
-
-			}
-			else if(convertToInteger + fertileWindowBefore <= 30 && convertToInteger + fertileWindowAfter > 30){
-
-				fertileWindow = "Fertile window will likely start on " + month + " " + (convertToInteger + fertileWindowBefore) + ", to end on " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowAfter) - 30);
-
-			}
-
-			else if(convertToInteger + fertileWindowBefore <= 30 && convertToInteger + fertileWindowAfter <= 30){
-
-				fertileWindow = "Fertile window will likely start on " + month + " " + (convertToInteger + fertileWindowBefore) + ", to end on " +  month + " " + (convertToInteger + fertileWindowAfter);
-
-			}
-
-		}
-
-		else if(monthsOfThirtyOneDays.contains(month)){
-
-			if(convertToInteger + fertileWindowBefore > 31 && convertToInteger + fertileWindowAfter > 31){
-
-				fertileWindow = "Fertile window will likely start on " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowBefore) - 31) + ", to end on " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowAfter) - 31);
-			
-
-			}
-			else if(convertToInteger + fertileWindowBefore <= 31 && convertToInteger + fertileWindowAfter > 31){
-
-				fertileWindow = "Fertile window will likely start on " + month + " " + (convertToInteger + fertileWindowBefore) + ", to end on " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowAfter) - 30);
-
-			}
-
-			else if(convertToInteger + fertileWindowBefore <= 31 && convertToInteger + fertileWindowAfter <= 31){
-
-				fertileWindow = "Fertile window will likely start on " + month + " " + (convertToInteger + fertileWindowBefore) + ", to end on " +  month + " " + (convertToInteger + fertileWindowAfter);
-
-			}
-
-
-		}
-
-		else if(monthsOfTwentyEightDays.contains(month)){
-
-			if(convertToInteger + fertileWindowBefore > 28 && convertToInteger + fertileWindowAfter > 28){
-
-				fertileWindow = "Fertile window will likely start on " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowBefore) - 28) + ", to end on " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowAfter) - 28);
-			
-
-			}
-			else if(convertToInteger + fertileWindowBefore <= 28 && convertToInteger + fertileWindowAfter > 28){
-
-				fertileWindow = "Fertile window will likely start on " + month + " " + (convertToInteger + fertileWindowBefore) + ", to end on " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowAfter) - 28);
-
-			}
-
-			else if(convertToInteger + fertileWindowBefore <= 28 && convertToInteger + fertileWindowAfter <= 28){
-
-				fertileWindow = "Fertile window will likely start on " + month + " " + (convertToInteger + fertileWindowBefore) + ", to end on " +  month + " " + (convertToInteger + fertileWindowAfter);
-
-			}
-
-
-		}
-		return fertileWindow;
-
-	}
-	public static String markSafePeriods(String month, String day, List<String> months){
-		throwErrorsForInvalidData(month,day,months);
-// Safe periods span from first period flow day to day before fertile window begins, then continues day after ferile window ends to day before next period start date.
-
-		int safePeriodBeforeFertileWindow = 8;
-		int safePeriodAfterFerileWindow = 27;
-
-		List<String> monthsOfThirtyDays = List.of("September", "April", "June", "November");
-		List<String> monthsOfThirtyOneDays = List.of("January", "March", "May", "July", "August", "October", "December");
-		List<String> monthsOfTwentyEightDays = List.of("February");
-
-		String safePeriods = "";
-		int convertToInteger = Integer.parseInt(day);
-
-		throwErrorsIfDayExceedsNumberOfDaysInAParticularMonth(month,day);
-		if(monthsOfThirtyDays.contains(month)){
-			if(convertToInteger + safePeriodBeforeFertileWindow > 30 && convertToInteger + safePeriodAfterFerileWindow > 30 && convertToInteger + 16 > 30){
-				safePeriods = "Your safe period is from " + month + " " + day + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodBeforeFertileWindow) - 30) + " and " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + 16) - 30) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 30);
-
-			}
-			else if(convertToInteger + safePeriodBeforeFertileWindow <= 30 && convertToInteger + safePeriodAfterFerileWindow > 30 && convertToInteger + 16 > 30){
-				safePeriods = "Your safe period is from " + month + " " + day + " to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + 16) - 30) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 30);
-
-			}
-			else if(convertToInteger + safePeriodBeforeFertileWindow <= 30 && convertToInteger + safePeriodAfterFerileWindow > 30 && convertToInteger + 16 <= 30){
-				safePeriods = "Your safe period is from " + month + " " + day + "to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + month + " " + (convertToInteger + 16) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 30);
-
-			}
-			else if(convertToInteger + safePeriodBeforeFertileWindow <= 30 && convertToInteger + safePeriodAfterFerileWindow <= 30 && convertToInteger + 16 <= 30){
-				safePeriods = "Your safe period is from " + month + " " + day + "to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + month + " " + (convertToInteger + 16) + " to " + month + " " + (convertToInteger + safePeriodAfterFerileWindow);
-
-			}
-
-		}
-		else if(monthsOfThirtyOneDays.contains(month)){
-
-			if(convertToInteger + safePeriodBeforeFertileWindow > 31 && convertToInteger + safePeriodAfterFerileWindow > 31 && convertToInteger + 16 > 31){
-				safePeriods = "Your safe period is from " + month + " " + day + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodBeforeFertileWindow) - 31) + " and " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + 16) - 31) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 31);
-
-			}
-			else if(convertToInteger + safePeriodBeforeFertileWindow <= 31 && convertToInteger + safePeriodAfterFerileWindow > 31 && convertToInteger + 16 > 31){
-				safePeriods = "Your safe period is from " + month + " " + day + " to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + 16) - 31) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 31);
-
-			}
-			else if(convertToInteger + safePeriodBeforeFertileWindow <= 31 && convertToInteger + safePeriodAfterFerileWindow > 31 && convertToInteger + 16 <= 31){
-				safePeriods = "Your safe period is from " + month + " " + day + "to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + month + " " + (convertToInteger + 16) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 31);
-
-			}
-			else if(convertToInteger + safePeriodBeforeFertileWindow <= 31 && convertToInteger + safePeriodAfterFerileWindow <= 31 && convertToInteger + 16 <= 31){
-				safePeriods = "Your safe period is from " + month + " " + day + "to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + month + " " + (convertToInteger + 16) + " to " + month + " " + (convertToInteger + safePeriodAfterFerileWindow);
-
-			}
-
-		}
-		else if(monthsOfTwentyEightDays.contains(month)){
-			if(convertToInteger + safePeriodBeforeFertileWindow > 28 && convertToInteger + safePeriodAfterFerileWindow > 28 && convertToInteger + 16 > 28){
-				safePeriods = "Your safe period is from " + month + " " + day + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodBeforeFertileWindow) - 28) + " and " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + 16) - 28) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 28);
-
-			}
-			else if(convertToInteger + safePeriodBeforeFertileWindow <= 28 && convertToInteger + safePeriodAfterFerileWindow > 28 && convertToInteger + 16 > 28){
-				safePeriods = "Your safe period is from " + month + " " + day + " to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + 16) - 28) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 28);
-
-			}
-			else if(convertToInteger + safePeriodBeforeFertileWindow <= 28 && convertToInteger + safePeriodAfterFerileWindow > 28 && convertToInteger + 16 <= 28){
-				safePeriods = "Your safe period is from " + month + " " + day + "to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + month + " " + (convertToInteger + 16) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 28);
-
-			}
-			else if(convertToInteger + safePeriodBeforeFertileWindow <= 28 && convertToInteger + safePeriodAfterFerileWindow <= 28 && convertToInteger + 16 <= 28){
-				safePeriods = "Your safe period is from " + month + " " + day + "to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + month + " " + (convertToInteger + 16) + " to " + month + " " + (convertToInteger + safePeriodAfterFerileWindow);
-
-			}
-
-		}
-		return safePeriods;
-		
 	}
 
 }
