@@ -72,4 +72,15 @@ public class MenstrualCycleAppMod{
 
 		return "Fertile window will start on " + returnDayOfWeek(ovulationDay.minusDays(fertileWindowBefore).toString()) + ", " + ovulationDay.minusDays(fertileWindowBefore) + ", to end on " + returnDayOfWeek(ovulationDay.plusDays(fertileWindowAfter).toString()) + ", " + ovulationDay.plusDays(fertileWindowAfter) + ".";
 	}
+
+	public static String markSafePeriods(String dateOfFirstFlow, LocalDate ovulationDay, LocalDate dateOfNextPeriod){
+		
+// Safe periods span from first period flow day to day before fertile window begins, then continues day after fertile window ends to day before next period start date.
+
+		int safePeriodBeforeFertileWindowStart = 6;
+		int safePeriodAfterFertileWindow = 2;
+		
+		return "Your safe period is from " + returnDayOfWeek(dateOfFirstFlow) + ", " + formatDate(dateOfFirstFlow) + " to " + returnDayOfWeek(ovulationDay.minusDays(safePeriodBeforeFertileWindowStart).toString()) + ", " + ovulationDay.minusDays(safePeriodBeforeFertileWindowStart) + " and from " + returnDayOfWeek(ovulationDay.plusDays(safePeriodAfterFertileWindow).toString()) + ", " + ovulationDay.plusDays(safePeriodAfterFertileWindow)  + " to " + returnDayOfWeek(dateOfNextPeriod.minusDays(1).toString()) + ", " + dateOfNextPeriod.minusDays(1) + ".";
+
+	}
 }
