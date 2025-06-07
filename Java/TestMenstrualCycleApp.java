@@ -57,6 +57,13 @@ public class TestMenstrualCycleApp{
 		expected = "For input string: \"REYYD\"";
 		assertEquals(expected, actual);
 	}
+	@Test
+	void testPeriodFlowDatesThrowsErrorIfANegativeDayInputIsEntered(){
+		day = "-30";
+		assertThrows(IllegalArgumentException.class, () -> {
+			MenstrualCycleApp.periodFlowDates(month,day,months);
+		});
+	}
 
 	@Test
 	void testPerioFlowDatesThrowsErrorIfDayEnteredExceedsNumberOfDaysInChosenMonth(){
@@ -75,7 +82,7 @@ public class TestMenstrualCycleApp{
 	}
 
 	@Test
-	void testNextPeriodStartDateReturnsCorrectDateWhenCurrentDateIfNextPeriodWillBeginInTheUpcomingMonth(){
+	void testNextPeriodStartDateReturnsCorrectDateIfNextPeriodWillBeginInTheUpcomingMonth(){
 		actual = MenstrualCycleApp.nextPeriodStartDate(month,day,months);
 		expected = "Your next period begins on March 27";
 		assertEquals(expected, actual);
@@ -83,7 +90,7 @@ public class TestMenstrualCycleApp{
 	}
 
 	@Test
-	void testNextPeriodStartDateReturnsCorrectDateWhenCurrentDateIfNextPeriodWillBeginInTheSameMonthAsPreviousAndMonthIsNotFebruary(){
+	void testNextPeriodStartDateReturnsCorrectDateIfNextPeriodWillBeginInTheSameMonthAsPreviousAndMonthIsNotFebruary(){
 		month = "June";
 		day = "1";
 		actual = MenstrualCycleApp.nextPeriodStartDate(month,day,months);
@@ -92,6 +99,35 @@ public class TestMenstrualCycleApp{
 
 	}
 
+	@Test
+	void testFindOvulationDayOccurs14daysBeforeNextPeriodStartDate(){
+		month = "June";
+		day = "1";
+		actual = MenstrualCycleApp.nextPeriodStartDate(month,day,months) + ". "  + MenstrualCycleApp.findOvulationDay(month, day, months) + ".";
+		expected =  "Your next period begins on June 29. Your ovulation day is June 15.";
+		assertEquals(expected, actual);
+
+	}
+
+	@Test
+	void testDurationOfFertileWindowToConfirmIfItLastsFromFiveDaysBeforeOvulationDayAndOneDayAfterOvulationDay(){
+		month = "June";
+		day = "1";
+		actual = MenstrualCycleApp.findOvulationDay(month, day, months) + ". " + MenstrualCycleApp.identifyFertileWindow(month,day,months) + ".";
+		expected = "Your ovulation day is June 15. Fertile window will likely start on June 10, to end on June 16.";
+		assertEquals(expected, actual);
+
+	}
+
+	@Test
+	void testDurationOfFertileWindowIfOvulationDayDoesNotOccurInTheSameMonthAsFirstPeriodFlowDate(){
+		month = "June";
+		day = "30";
+		actual = MenstrualCycleApp.findOvulationDay(month, day, months) + ". " + MenstrualCycleApp.identifyFertileWindow(month,day,months) + ".";
+		expected = "Your ovulation day is July 14. Fertile window will likely start on July 9, to end on July 15.";
+		assertEquals(expected, actual);
+
+	}
 
 
 }
