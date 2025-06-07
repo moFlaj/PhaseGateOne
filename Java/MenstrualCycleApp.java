@@ -152,10 +152,10 @@ public class MenstrualCycleApp{
 		}
 		else if(monthsOfThirtyOneDays.contains(month)){
 			if(convertToInteger + calcOvDate > 31){
-				ovulationDate = "Your next period begins on " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + calcOvDate) - 31);
+				ovulationDate = "Your ovulation day is " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + calcOvDate) - 31);
 			}
 			else{
-				ovulationDate = "Your next period begins on " + month + " " + (convertToInteger + calcOvDate);
+				ovulationDate = "Your ovulation day is " + month + " " + (convertToInteger + calcOvDate);
 
 			}
 			
@@ -163,10 +163,10 @@ public class MenstrualCycleApp{
 		}
 		else if(monthsOfTwentyEightDays.contains(month)){
 			if(convertToInteger + calcOvDate > 28){
-				ovulationDate = "Your next period begins on " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + calcOvDate) - 28);
+				ovulationDate = "Your ovulation day is " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + calcOvDate) - 28);
 			}
 			else{
-				ovulationDate = "Your next period begins on " + month + " " + (convertToInteger + calcOvDate);
+				ovulationDate = "Your ovulation day is " + month + " " + (convertToInteger + calcOvDate);
 
 			}
 		}
