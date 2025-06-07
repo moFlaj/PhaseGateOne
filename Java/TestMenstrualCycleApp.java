@@ -84,6 +84,16 @@ public class TestMenstrualCycleAppMod{
 	void testFindOvulationDayReturnsOvulationDayWhichIsFourteenDaysBeforeStartOfNextPeriod(){
 		LocalDate nextPeriodStartDate = LocalDate.parse(inputDate).plusDays(cycleLength);
 		actual = MenstrualCycleAppMod.nextPeriodStartDate(inputDate, cycleLength) + " " + MenstrualCycleAppMod.findOvulationDay(nextPeriodStartDate);
-		expected = "Your next period begins on Sunday, 2025-07-27. Ovulation day of current period is Monday, 2025-07-14.";
+		expected = "Your next period begins on Sunday, 2025-07-27. Ovulation day of current period is Sunday, 2025-07-13.";
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	void testIdentifyFertileWindowWillSpanFromFiveDaysBeforeOvulationDayToOneDayAfterOvulationDay(){
+		LocalDate nextPeriodStartDate = LocalDate.parse(inputDate).plusDays(cycleLength);
+		LocalDate ovulationDate = nextPeriodStartDate.minusDays(14);
+		actual = MenstrualCycleAppMod.findOvulationDay(nextPeriodStartDate) + " " + MenstrualCycleAppMod.identifyFertileWindow(ovulationDate);
+		expected = "Ovulation day of current period is Sunday, 2025-07-13. Fertile window will start on Tuesday, 2025-07-08, to end on Monday, 2025-07-14.";
+		assertEquals(expected, actual);
 	}
 }
