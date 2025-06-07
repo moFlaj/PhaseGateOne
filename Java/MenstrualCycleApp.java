@@ -131,6 +131,7 @@ public class MenstrualCycleApp{
 	}
 
 	public static String findOvulationDay(String month, String day, List<String> months){
+
 		throwErrorsForInvalidData(month,day,months);
 //Ovulation day occurs 14 days before next next period date
 		int calcOvDate = 14;
@@ -174,7 +175,90 @@ public class MenstrualCycleApp{
 		return ovulationDate;
 
 
+	}
 
+	public static String identifyFertileWindow(String month, String day, List<String> months){
+		throwErrorsForInvalidData(month,day,months);
+//Fertile window is five days before ovulation day and one day after
+//If ovulation day is fourteen days after first flow, then fertile window before ovulation day is 14 - 5, and end of fertile window is 14 + 1
+
+		int fertileWindowBefore = 9;
+		int fertileWindowAfter = 15;
+		List<String> monthsOfThirtyDays = List.of("September", "April", "June", "November");
+		List<String> monthsOfThirtyOneDays = List.of("January", "March", "May", "July", "August", "October", "December");
+		List<String> monthsOfTwentyEightDays = List.of("February");
+
+		String fertileWindow = "";
+		int convertToInteger = Integer.parseInt(day);
+
+		throwErrorsIfDayExceedsNumberOfDaysInAParticularMonth(month,day);
+
+		if(monthsOfThirtyDays.contains(month)){
+			if(convertToInteger + fertileWindowBefore > 30 && convertToInteger + fertileWindowAfter > 30){
+				fertileWindow = "Fertile window will likely start on " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowBefore) - 30) + ", to end on " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowAfter) - 30);
+			
+
+			}
+			else if(convertToInteger + fertileWindowBefore <= 30 && convertToInteger + fertileWindowAfter > 30){
+
+				fertileWindow = "Fertile window will likely start on " + month + " " + (convertToInteger + fertileWindowBefore) + ", to end on " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowAfter) - 30);
+
+			}
+
+			else if(convertToInteger + fertileWindowBefore <= 30 && convertToInteger + fertileWindowAfter <= 30){
+
+				fertileWindow = "Fertile window will likely start on " + month + " " + (convertToInteger + fertileWindowBefore) + ", to end on " +  month + " " + (convertToInteger + fertileWindowAfter);
+
+			}
+
+		}
+
+		else if(monthsOfThirtyOneDays.contains(month)){
+
+			if(convertToInteger + fertileWindowBefore > 31 && convertToInteger + fertileWindowAfter > 31){
+
+				fertileWindow = "Fertile window will likely start on " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowBefore) - 31) + ", to end on " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowAfter) - 31);
+			
+
+			}
+			else if(convertToInteger + fertileWindowBefore <= 31 && convertToInteger + fertileWindowAfter > 31){
+
+				fertileWindow = "Fertile window will likely start on " + month + " " + (convertToInteger + fertileWindowBefore) + ", to end on " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowAfter) - 30);
+
+			}
+
+			else if(convertToInteger + fertileWindowBefore <= 31 && convertToInteger + fertileWindowAfter <= 31){
+
+				fertileWindow = "Fertile window will likely start on " + month + " " + (convertToInteger + fertileWindowBefore) + ", to end on " +  month + " " + (convertToInteger + fertileWindowAfter);
+
+			}
+
+
+		}
+
+		else if(monthsOfTwentyEightDays.contains(month)){
+
+			if(convertToInteger + fertileWindowBefore > 28 && convertToInteger + fertileWindowAfter > 28){
+
+				fertileWindow = "Fertile window will likely start on " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowBefore) - 28) + ", to end on " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowAfter) - 28);
+			
+
+			}
+			else if(convertToInteger + fertileWindowBefore <= 28 && convertToInteger + fertileWindowAfter > 28){
+
+				fertileWindow = "Fertile window will likely start on " + month + " " + (convertToInteger + fertileWindowBefore) + ", to end on " +  months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + fertileWindowAfter) - 28);
+
+			}
+
+			else if(convertToInteger + fertileWindowBefore <= 28 && convertToInteger + fertileWindowAfter <= 28){
+
+				fertileWindow = "Fertile window will likely start on " + month + " " + (convertToInteger + fertileWindowBefore) + ", to end on " +  month + " " + (convertToInteger + fertileWindowAfter);
+
+			}
+
+
+		}
+		return fertileWindow;
 
 	}
 
