@@ -52,4 +52,13 @@ public class MenstrualCycleAppMod{
 
 		return "Your next period begins on " + returnDayOfWeek(formatDate(dateOfFirstFlow).plusDays(cycleLength).toString()) + ", " + formatDate(dateOfFirstFlow).plusDays(cycleLength) + ".";
 	}
+
+	public static String findOvulationDay(LocalDate dateOfNextPeriod){
+
+		throwErrorsIfDateInputIsInvalid(dateOfNextPeriod.toString());
+		int ovulationDay = 14;
+//Ovulation day occurs 14 days before next period start date.
+
+		return "Ovulation day of current period is " + returnDayOfWeek(dateOfNextPeriod.minusDays(ovulationDay).toString()) + ", " + dateOfNextPeriod.minusDays(ovulationDay) + ".";
+	}
 }
