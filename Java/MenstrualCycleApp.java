@@ -261,9 +261,81 @@ public class MenstrualCycleApp{
 		return fertileWindow;
 
 	}
+	public static String markSafePeriods(String month, String day, List<String> months){
+		throwErrorsForInvalidData(month,day,months);
+// Safe periods span from first period flow day to day before fertile window begins, then continues day after ferile window ends to day before next period start date.
 
+		int safePeriodBeforeFertileWindow = 8;
+		int safePeriodAfterFerileWindow = 27;
 
+		List<String> monthsOfThirtyDays = List.of("September", "April", "June", "November");
+		List<String> monthsOfThirtyOneDays = List.of("January", "March", "May", "July", "August", "October", "December");
+		List<String> monthsOfTwentyEightDays = List.of("February");
 
+		String safePeriods = "";
+		int convertToInteger = Integer.parseInt(day);
 
+		throwErrorsIfDayExceedsNumberOfDaysInAParticularMonth(month,day);
+		if(monthsOfThirtyDays.contains(month)){
+			if(convertToInteger + safePeriodBeforeFertileWindow > 30 && convertToInteger + safePeriodAfterFerileWindow > 30 && convertToInteger + 16 > 30){
+				safePeriods = "Your safe period is from " + month + " " + day + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodBeforeFertileWindow) - 30) + " and " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + 16) - 30) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 30);
+
+			}
+			else if(convertToInteger + safePeriodBeforeFertileWindow <= 30 && convertToInteger + safePeriodAfterFerileWindow > 30 && convertToInteger + 16 > 30){
+				safePeriods = "Your safe period is from " + month + " " + day + " to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + 16) - 30) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 30);
+
+			}
+			else if(convertToInteger + safePeriodBeforeFertileWindow <= 30 && convertToInteger + safePeriodAfterFerileWindow > 30 && convertToInteger + 16 <= 30){
+				safePeriods = "Your safe period is from " + month + " " + day + "to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + month + " " + (convertToInteger + 16) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 30);
+
+			}
+			else if(convertToInteger + safePeriodBeforeFertileWindow <= 30 && convertToInteger + safePeriodAfterFerileWindow <= 30 && convertToInteger + 16 <= 30){
+				safePeriods = "Your safe period is from " + month + " " + day + "to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + month + " " + (convertToInteger + 16) + " to " + month + " " + (convertToInteger + safePeriodAfterFerileWindow);
+
+			}
+
+		}
+		else if(monthsOfThirtyOneDays.contains(month)){
+
+			if(convertToInteger + safePeriodBeforeFertileWindow > 31 && convertToInteger + safePeriodAfterFerileWindow > 31 && convertToInteger + 16 > 31){
+				safePeriods = "Your safe period is from " + month + " " + day + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodBeforeFertileWindow) - 31) + " and " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + 16) - 31) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 31);
+
+			}
+			else if(convertToInteger + safePeriodBeforeFertileWindow <= 31 && convertToInteger + safePeriodAfterFerileWindow > 31 && convertToInteger + 16 > 31){
+				safePeriods = "Your safe period is from " + month + " " + day + " to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + 16) - 31) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 31);
+
+			}
+			else if(convertToInteger + safePeriodBeforeFertileWindow <= 31 && convertToInteger + safePeriodAfterFerileWindow > 31 && convertToInteger + 16 <= 31){
+				safePeriods = "Your safe period is from " + month + " " + day + "to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + month + " " + (convertToInteger + 16) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 31);
+
+			}
+			else if(convertToInteger + safePeriodBeforeFertileWindow <= 31 && convertToInteger + safePeriodAfterFerileWindow <= 31 && convertToInteger + 16 <= 31){
+				safePeriods = "Your safe period is from " + month + " " + day + "to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + month + " " + (convertToInteger + 16) + " to " + month + " " + (convertToInteger + safePeriodAfterFerileWindow);
+
+			}
+
+		}
+		else if(monthsOfTwentyEightDays.contains(month)){
+			if(convertToInteger + safePeriodBeforeFertileWindow > 28 && convertToInteger + safePeriodAfterFerileWindow > 28 && convertToInteger + 16 > 28){
+				safePeriods = "Your safe period is from " + month + " " + day + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodBeforeFertileWindow) - 28) + " and " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + 16) - 28) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 28);
+
+			}
+			else if(convertToInteger + safePeriodBeforeFertileWindow <= 28 && convertToInteger + safePeriodAfterFerileWindow > 28 && convertToInteger + 16 > 28){
+				safePeriods = "Your safe period is from " + month + " " + day + " to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + 16) - 28) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 28);
+
+			}
+			else if(convertToInteger + safePeriodBeforeFertileWindow <= 28 && convertToInteger + safePeriodAfterFerileWindow > 28 && convertToInteger + 16 <= 28){
+				safePeriods = "Your safe period is from " + month + " " + day + "to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + month + " " + (convertToInteger + 16) + " to " + months.get(months.indexOf(month) + 1) + " " + ((convertToInteger + safePeriodAfterFerileWindow) - 28);
+
+			}
+			else if(convertToInteger + safePeriodBeforeFertileWindow <= 28 && convertToInteger + safePeriodAfterFerileWindow <= 28 && convertToInteger + 16 <= 28){
+				safePeriods = "Your safe period is from " + month + " " + day + "to " + month + " " + (convertToInteger + safePeriodBeforeFertileWindow) + " and " + month + " " + (convertToInteger + 16) + " to " + month + " " + (convertToInteger + safePeriodAfterFerileWindow);
+
+			}
+
+		}
+		return safePeriods;
+		
+	}
 
 }
