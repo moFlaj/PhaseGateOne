@@ -37,15 +37,19 @@ public class MenstrualCycleAppMod{
 		return customDate;
 	}
 
-	public static String periodFlowDays(String dateOfFirstFlow){
+	public static String periodFlowDays(String dateOfFirstFlow, int averageOfFlowDays){
 
 		throwErrorsIfDateInputIsInvalid(dateOfFirstFlow);
 
-		int averageOfFlowDays = (3 + 7)/2;
-// Flow days in women lasts around 3 - 7 days.
+		return "Your period will likely last from " + returnDayOfWeek(dateOfFirstFlow) + ", " + formatDate(dateOfFirstFlow) + " to " + returnDayOfWeek(formatDate(dateOfFirstFlow).plusDays(averageOfFlowDays).toString()) + ", " + formatDate(dateOfFirstFlow).plusDays(averageOfFlowDays)  + ".";
+
+	}
 
 
-		return "Your period will likely last from " + returnDayOfWeek(dateOfFirstFlow) + ", " + formatDate(dateOfFirstFlow) + " to " + returnDayOfWeek((formatDate(dateOfFirstFlow).plusDays(averageOfFlowDays).toString())) + ", " + formatDate(dateOfFirstFlow).plusDays(averageOfFlowDays)  + ".";
+	public static String nextPeriodStartDate(String dateOfFirstFlow, int cycleLength){
 
+		throwErrorsIfDateInputIsInvalid(dateOfFirstFlow);
+
+		return "Your next period begins on " + returnDayOfWeek(formatDate(dateOfFirstFlow).plusDays(cycleLength).toString()) + ", " + formatDate(dateOfFirstFlow).plusDays(cycleLength) + ".";
 	}
 }
