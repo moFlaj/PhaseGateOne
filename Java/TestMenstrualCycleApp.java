@@ -129,5 +129,13 @@ public class TestMenstrualCycleApp{
 
 	}
 
+	@Test
+	void testMarkSafePeriodReturnsCorrectSafePeriodDuration(){
+		actual = MenstrualCycleApp.findOvulationDay(month, day, months) + ". " + MenstrualCycleApp.identifyFertileWindow(month,day,months) + ". " + MenstrualCycleApp.markSafePeriods(month,day,months) + ".";
+		expected = "Your ovulation day is March 13. Fertile window will likely start on March 8, to end on March 14. Your safe period is from February 27 to March 7 and March 15 to March 26.";
+		assertEquals(expected, actual);
+
+	}
+
 
 }
