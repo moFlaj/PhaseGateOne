@@ -22,6 +22,13 @@ public class TestMenstrualCycleAppMod{
 	}
 
 	@Test
+	void testReturnDayOfWeekReturnsDayOfDateInput(){
+		actual = MenstrualCycleAppMod.returnDayOfWeek(inputDate);
+		expected = "Sunday";
+		assertEquals(expected, actual);
+	}
+
+	@Test
 	void testPeriodFlowDaysReturnsCorrectDateIfFlowSpansFromCurrentMonthToTheNextMonthOfSameYear(){
 		actual = MenstrualCycleAppMod.periodFlowDays(inputDate, numberOfFlowDays);
 		expected = "Your period will likely last from Sunday, 2025-06-29 to Friday, 2025-07-04.";
@@ -70,5 +77,12 @@ public class TestMenstrualCycleAppMod{
 		assertThrows(IllegalArgumentException.class, () -> {
 			MenstrualCycleAppMod.nextPeriodStartDate(inputDate, cycleLength);
 		});
+	}
+
+	@Test
+	void testFindOvulationDayReturnsOvulationDayWhichIsFourteenDaysBeforeStartOfNextPeriod(){
+		LocalDate nextPeriodStartDate = LocalDate.parse(inputDate).plusDays(cycleLength);
+		actual = MenstrualCycleAppMod.nextPeriodStartDate(inputDate, cycleLength) + " " + MenstrualCycleAppMod.findOvulationDay(nextPeriodStartDate);
+		expected = "Your next period begins on Sunday, 2025-07-27. Ovulation day of current period is Monday, 2025-07-14.";
 	}
 }
