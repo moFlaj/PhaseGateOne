@@ -48,3 +48,10 @@ class test_menstrual_cycle_app(unittest.TestCase):
 	def test_next_period_start_date_raises_error_if_cycle_length_is_not_an_integer(self):
 		user_average_cycle_length = '21'
 		self.assertRaises(ValueError, next_period_start_date, self.date_input, user_average_cycle_length)
+
+	def test_find_ovulation_day_occurs_fourteen_days_before_next_period(self):
+		user_average_cycle_length = 28
+		next_period_start = format_date_input = raise_errors_if_format_invalid_or_return_formatted_date(self.date_input) + timedelta(user_average_cycle_length)
+		actual = next_period_start_date(self.date_input, user_average_cycle_length) + " " + find_ovulation_day(next_period_start)
+		expected = 'Your next period begins on Sunday, 06 July, 2025. Ovulation day of current period is on Sunday, 22 June, 2025.'
+		self.assertEqual(actual, expected)
