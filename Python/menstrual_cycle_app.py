@@ -37,4 +37,13 @@ def next_period_start_date(date_of_first_flow, cycle_length):
 
 	return 'Your next period begins on ' + return_day_of_week(formatted_date_input + timedelta(cycle_length)) + ", " + (formatted_date_input + timedelta(cycle_length)).strftime("%d %B, %Y") + '.'
 
+def find_ovulation_day(next_period_start_date):
+
+# Ovulation day usually occurs about 14 days before the next period starts.
+	ovulation_day = 14
+
+	if not isinstance(next_period_start_date, date):
+		raise ValueError("Invalid input. Field is only for dates.")
+
+	return "Ovulation day of current period is on " + return_day_of_week(next_period_start_date - timedelta(ovulation_day)) + ', ' + (next_period_start_date - timedelta(ovulation_day)).strftime("%d %B, %Y") + '.'
 	
