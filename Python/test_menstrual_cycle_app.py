@@ -55,3 +55,11 @@ class test_menstrual_cycle_app(unittest.TestCase):
 		actual = next_period_start_date(self.date_input, user_average_cycle_length) + " " + find_ovulation_day(next_period_start)
 		expected = 'Your next period begins on Sunday, 06 July, 2025. Ovulation day of current period is on Sunday, 22 June, 2025.'
 		self.assertEqual(actual, expected)
+
+	def test_mark_safe_periods(self):
+		user_average_cycle_length = 28
+		ovulation_date = raise_errors_if_format_invalid_or_return_formatted_date('2025/06/22')
+		next_period_start_date = raise_errors_if_format_invalid_or_return_formatted_date(self.date_input) + timedelta(user_average_cycle_length)
+		actual = mark_safe_periods(self.date_input, ovulation_date, next_period_start_date)
+		expected = 'Your safe period is from Sunday, 08 June, 2025 to Monday, 16 June, 2025 and from Tuesday, 24 June, 2025 to Saturday, 05 July, 2025.'
+		self.assertEqual(actual, expected)
