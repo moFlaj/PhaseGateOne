@@ -46,4 +46,9 @@ def find_ovulation_day(next_period_start_date):
 		raise ValueError("Invalid input. Field is only for dates.")
 
 	return "Ovulation day of current period is on " + return_day_of_week(next_period_start_date - timedelta(ovulation_day)) + ', ' + (next_period_start_date - timedelta(ovulation_day)).strftime("%d %B, %Y") + '.'
+
+def mark_safe_periods(date_of_first_flow, ovulation_date, next_period_start_date):
 	
+# Safe periods span from first period flow day to day before fertile window begins, then continues day after fertile window ends to day before next period start date.
+
+	return 'Your safe period is from ' + return_day_of_week(raise_errors_if_format_invalid_or_return_formatted_date(date_of_first_flow)) + ', ' + (raise_errors_if_format_invalid_or_return_formatted_date(date_of_first_flow)).strftime("%d %B, %Y") + " to " + return_day_of_week(ovulation_date - timedelta(6)) + ', ' + (ovulation_date - timedelta(6)).strftime("%d %B, %Y") + " and from " +  return_day_of_week(ovulation_date + timedelta(2)) + ', ' + (ovulation_date + timedelta(2)).strftime("%d %B, %Y") + " to " + return_day_of_week(next_period_start_date - timedelta(1)) + ', ' + (next_period_start_date - timedelta(1)).strftime("%d %B, %Y") + '.'
