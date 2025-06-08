@@ -38,3 +38,13 @@ class test_menstrual_cycle_app(unittest.TestCase):
 		actual = next_period_start_date(self.date_input, user_average_cycle_length)
 		expected = 'Your next period begins on Sunday, 29 June, 2025.'
 		self.assertEqual(actual, expected)
+
+	def test_next_period_start_date_raises_error_if_date_format_is_invalid(self):
+		date_input = '2025-06-08'
+#Format: YYYY/MM/DD
+		user_average_cycle_length = 21
+		self.assertRaises(ValueError, next_period_start_date, date_input, user_average_cycle_length)
+
+	def test_next_period_start_date_raises_error_if_cycle_length_is_not_an_integer(self):
+		user_average_cycle_length = '21'
+		self.assertRaises(ValueError, next_period_start_date, self.date_input, user_average_cycle_length)
