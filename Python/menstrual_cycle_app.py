@@ -29,4 +29,12 @@ def period_flow_days(date_input, number_of_flow_days):
 	
 	return 'Your period flow will last from ' + return_day_of_week(formatted_date_input) + ', ' + formatted_date_input.strftime("%d %B, %Y") + ' to ' + return_day_of_week(date_of_end_of_flow) + ", " + date_of_end_of_flow.strftime("%d %B, %Y") + '.'
 
+def next_period_start_date(date_of_first_flow, cycle_length):
+	formatted_date_input = raise_errors_if_format_invalid_or_return_formatted_date(date_of_first_flow)
+
+	if not isinstance(cycle_length, int):
+		raise ValueError("Flow days must be whole number.")
+
+	return 'Your next period begins on ' + return_day_of_week(formatted_date_input + timedelta(cycle_length)) + ", " + (formatted_date_input + timedelta(cycle_length)).strftime("%d %B, %Y") + '.'
+
 	
