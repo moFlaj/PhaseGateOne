@@ -32,3 +32,9 @@ class test_menstrual_cycle_app(unittest.TestCase):
 	def test_period_flow_days_throws_error_if_second_argument_is_not_of_type_int(self):
 		user_average_no_of_flow_days = 4.5
 		self.assertRaises(ValueError, period_flow_days, self.date_input, user_average_no_of_flow_days)
+
+	def test_next_period_start_date(self):
+		user_average_cycle_length = 21
+		actual = next_period_start_date(self.date_input, user_average_cycle_length)
+		expected = 'Your next period begins on Sunday, 29 June, 2025.'
+		self.assertEqual(actual, expected)
