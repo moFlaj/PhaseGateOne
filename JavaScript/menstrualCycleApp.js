@@ -23,8 +23,12 @@ function periodFlowDays(dateInput, userAverageNoOfFlowDays){
 	if(!Number.isInteger(userAverageNoOfFlowDays)){
 		throw new Error("Enter a valid integer.")
 	}
-
 	return 'Your period flow will last from ' + returnDayOfWeek(formattedDate) + ', ' + formattedDate.format("DD MMMM, YYYY") + " to " + returnDayOfWeek(formattedDate.add(userAverageNoOfFlowDays, 'day')) + ', ' + formattedDate.add(userAverageNoOfFlowDays, 'day').format("DD MMMM, YYYY") + '.'
+}
+
+function findOvulationDay(nextPeriodStartDate){
+	let ovulationDay = 14	
+	return 'Ovulation day of current period is on ' + returnDayOfWeek(nextPeriodStartDate.subtract(ovulationDay, 'day')) + ', ' + nextPeriodStartDate.subtract(ovulationDay, 'day').format("DD MMMM, YYYY") + '.'
 }
 
 
