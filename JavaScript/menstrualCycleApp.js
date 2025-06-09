@@ -40,6 +40,11 @@ function identifyFertileWindow(ovulationDay){
 
 }
 
+function markSafePeriods(dateOfFirstFlow, ovulationDate, nextPeriodStartDate){
+// Safe periods span from first period flow day to day before fertile window begins, then continues day after fertile window ends to day before next period start date.
+	return 'Your safe period is from ' + returnDayOfWeek(dateOfFirstFlow) + ', ' + dateOfFirstFlow.format("DD MMMM, YYYY") + ' to ' + returnDayOfWeek(ovulationDate.subtract(6,'day')) + ', ' + ovulationDate.subtract(6,'day').format("DD MMMM, YYYY") + ' and from ' + returnDayOfWeek(ovulationDate.add(2,'day')) + ', ' + ovulationDate.add(2,'day').format("DD MMMM, YYYY") + ' to ' + returnDayOfWeek(nextPeriodStartDate.subtract(1,'day'))  + ', ' + nextPeriodStartDate.subtract(1,'day').format("DD MMMM, YYYY") + '.'
+}
+
 console.log(throwErrorsIfDateInputInvalidOrReturnFormattedDate("2025/06/09").format("YYYY/MM/DD"))
 let format_date = throwErrorsIfDateInputInvalidOrReturnFormattedDate("2025/06/09")
 console.log(returnDayOfWeek(format_date))
@@ -49,3 +54,4 @@ let nextPeriodDate = throwErrorsIfDateInputInvalidOrReturnFormattedDate("2025/06
 console.log(findOvulationDay(nextPeriodDate))
 let ovulationDay = throwErrorsIfDateInputInvalidOrReturnFormattedDate("2025/06/09").add(28,'day').subtract(14,'day')
 console.log(identifyFertileWindow(ovulationDay))
+console.log(markSafePeriods(format_date,ovulationDay,nextPeriodDate))
