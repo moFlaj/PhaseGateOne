@@ -32,26 +32,31 @@ public class CheckoutSystem{
 	public static String getProductPrice(String product, String[] allProducts, String[] allPrices, String[] purchasedItemInfo){
 
 		Arrays.sort(allProducts);
-// Prices are arranged according to sorted order of products
+// Prices are arranged according to sorted order of products.
+
+		List<String> allProductsToList = Arrays.asList(allProducts);
+
 		int counter = 0;
 		int productIndex = 0;
+
 		String productNameInfoIncomplete = "";
 	
 		while(true){
-			for(int index = 0; index < allProducts.length; index++){
-				if(product.equalsIgnoreCase(allProducts[index].substring(0,product.length()))){
+			for(int index = 0; index < allProductsToList.size(); index++){
+				if(product.equalsIgnoreCase(allProductsToList.get(index)) || (allProductsToList.get(index).toLowerCase()).contains(product.toLowerCase())){
 					productIndex = index;
 					counter++;
 					if(counter >= 1){
-						productNameInfoIncomplete = productNameInfoIncomplete + allProducts[index] + "	" + allPrices[productIndex] + "\n";
+						productNameInfoIncomplete = productNameInfoIncomplete + counter + ". " + allProductsToList.get(index) + "	" + allPrices[productIndex] + "\n";
 
 					}
 				}
 			}
 			if(counter == 1){
 				purchasedItemInfo[0] = product;
-				purchasedItemInfo[2] = "NGN " + allPrices[productIndex];
-				return purchasedItemInfo[2];
+				purchasedItemInfo[2] = allPrices[productIndex];
+				System.out.println(purchasedItemInfo[2]);
+				return "NGN " + purchasedItemInfo[2];
 			}
 			else{
 				return productNameInfoIncomplete;
@@ -60,23 +65,34 @@ public class CheckoutSystem{
 
 	}
 
-/*	public static void customerPurchase(String[] purchasedItemInfo, String pieces, List<String[]> customerPurchase){
+	public static String addPurchasedProductToList(String[] purchasedItemInfo, String pieces, List<String[]> customerPurchase){
 		try{
 			Integer.parseInt(pieces);
-			purchasedItem[1] = pieces;
+			purchasedItemInfo[1] = pieces;
 			BigDecimal totalPrice = new BigDecimal(purchasedItemInfo[2]).multiply(new BigDecimal(purchasedItemInfo[1]));
 			purchasedItemInfo[3] = totalPrice.toString();
 			customerPurchase.add(purchasedItemInfo);
+			return "Product added succesfully. Add more items?";
 		}
 		catch(NumberFormatException error){
 			throw new IllegalArgumentException("Quantity entered is not valid.");
 		}	
 
-	}*/
+	}
+
+	public static BigDecimal computeTotalCostOfItemsPurchased(List<String[]> customerPurchase){
+		BigDecimal sum = new BigDecimal("0");
+
+		for(String[] item : customerPurchase){
+
+			sum = sum.add(new BigDecimal(item[3]));
+			
+		}
+	
+		return sum;
+	}
 
 }
 
 
 				
-
-//Assuming price of product is in same index as the product in its array.
