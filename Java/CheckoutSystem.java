@@ -41,27 +41,26 @@ public class CheckoutSystem{
 
 		String productNameInfoIncomplete = "";
 	
-		while(true){
-			for(int index = 0; index < allProductsToList.size(); index++){
-				if(product.equalsIgnoreCase(allProductsToList.get(index)) || (allProductsToList.get(index).toLowerCase()).contains(product.toLowerCase())){
-					productIndex = index;
-					counter++;
-					if(counter >= 1){
-						productNameInfoIncomplete = productNameInfoIncomplete + counter + ". " + allProductsToList.get(index) + "	" + allPrices[productIndex] + "\n";
+		for(int index = 0; index < allProductsToList.size(); index++){
+			if(product.equalsIgnoreCase(allProductsToList.get(index)) || (allProductsToList.get(index).toLowerCase()).contains(product.toLowerCase())){
+				productIndex = index;
+				counter++;
+				if(counter >= 1){
+					productNameInfoIncomplete = productNameInfoIncomplete + counter + ". " + allProductsToList.get(index) + "	" + allPrices[productIndex] + "\n";
 
-					}
 				}
 			}
-			if(counter == 1){
-				purchasedItemInfo[0] = product;
-				purchasedItemInfo[2] = allPrices[productIndex];
-				System.out.println(purchasedItemInfo[2]);
-				return "NGN " + purchasedItemInfo[2];
-			}
-			else{
-				return productNameInfoIncomplete;
-			}
 		}
+		if(counter == 1){
+			purchasedItemInfo[0] = product;
+			purchasedItemInfo[2] = allPrices[productIndex];
+			
+			return "NGN " + purchasedItemInfo[2];
+		}
+		else{
+			return productNameInfoIncomplete;
+		}
+		
 
 	}
 
@@ -70,6 +69,7 @@ public class CheckoutSystem{
 			Integer.parseInt(pieces);
 			purchasedItemInfo[1] = pieces;
 			BigDecimal totalPrice = new BigDecimal(purchasedItemInfo[2]).multiply(new BigDecimal(purchasedItemInfo[1]));
+			// System.out.println(totalPrice);
 			purchasedItemInfo[3] = totalPrice.toString();
 			customerPurchase.add(purchasedItemInfo);
 			return "Product added succesfully. Add more items?";
@@ -82,13 +82,9 @@ public class CheckoutSystem{
 
 	public static BigDecimal computeTotalCostOfItemsPurchased(List<String[]> customerPurchase){
 		BigDecimal sum = new BigDecimal("0");
-
 		for(String[] item : customerPurchase){
-
-			sum = sum.add(new BigDecimal(item[3]));
-			
+			sum = sum.add(new BigDecimal(item[3]));	
 		}
-	
 		return sum;
 	}
 
