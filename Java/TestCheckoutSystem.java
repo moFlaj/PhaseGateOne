@@ -123,12 +123,13 @@ public class TestCheckoutSystem{
 		CheckoutSystem.getProductPrice(product, allProducts, allPrices, purchasedItemInfo);
 		String quantity = "2";
 		CheckoutSystem.addPurchasedProductToList(purchasedItemInfo, quantity, customerPurchase);
+		purchasedItemInfo = new String[4];
 		product = "cornflakes	35g";
 		CheckoutSystem.getProductPrice(product, allProducts, allPrices, purchasedItemInfo);
 		quantity = "5";
 		CheckoutSystem.addPurchasedProductToList(purchasedItemInfo, quantity, customerPurchase);
 		actual = CheckoutSystem.computeTotalCostOfItemsPurchased(customerPurchase).toString();
-		expected = "";
+		expected = "19400.00";
 		assertEquals(expected, actual);
 	}
 
