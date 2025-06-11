@@ -15,7 +15,7 @@ public class TestCheckoutSystem{
 	String lastName;
 	String middleName;
 	String[] customerInfo;
-	String actaual;
+	String actual;
 	String expected;
 	String product;
 	String[] allProducts;
@@ -34,7 +34,7 @@ public class TestCheckoutSystem{
 		allPrices = new String[] {"1700.00", "1200.00", "3000.00", "8000.00", "15700.00", "2200.00", "4200.00", "3500.00", "1100.00", "5450.00", "5800.00"};
 
 		purchasedItemInfo = new String[4];
-		customerPurchase = new ArrayList<String[]>();
+		customerPurchase = new ArrayList<>();
 	}
 
 	@Test
@@ -92,8 +92,44 @@ public class TestCheckoutSystem{
 	@Test
 	void testGetProductPriceReturnsProductSizeAndPriceIfSearchInputIsNotCompletelyStated(){
 		product = "mil";
-		assertEquals("Milk	25g	2200.00\nMilk	50g	4200.00\nMilo	20g	3500.00\n", CheckoutSystem.getProductPrice(product, allProducts, allPrices, purchasedItemInfo));
+		assertEquals("1. Milk	25g	2200.00\n2. Milk	50g	4200.00\n3. Milo	20g	3500.00\n", CheckoutSystem.getProductPrice(product, allProducts, allPrices, purchasedItemInfo));
 
+	}
+
+	@Test
+	void testAddPurchasedProductToListReturnsSuccessfulIfQuantityEnteredIsAValidInteger(){
+		product = "milk	25g";
+		CheckoutSystem.getProductPrice(product, allProducts, allPrices, purchasedItemInfo);
+		String quantity = "2";
+		actual = CheckoutSystem.addPurchasedProductToList(purchasedItemInfo, quantity, customerPurchase);
+		expected = "Product added succesfully. Add more items?";
+		assertEquals(expected, actual);
+
+	}
+
+	@Test
+	void testAddPurchasedProductToListThrowsErrorIfQuantityEnteredIsNotAValidInteger(){
+		product = "milk	25g";
+		CheckoutSystem.getProductPrice(product, allProducts, allPrices, purchasedItemInfo);
+		String quantity = "2.5";
+		assertThrows(IllegalArgumentException.class, () -> {
+			CheckoutSystem.addPurchasedProductToList(purchasedItemInfo, quantity, customerPurchase);
+		});
+	}
+
+	@Test
+	void testComputeTotalCostOfItemsPurchased(){
+		product = "milk	25g";
+		CheckoutSystem.getProductPrice(product, allProducts, allPrices, purchasedItemInfo);
+		String quantity = "2";
+		CheckoutSystem.addPurchasedProductToList(purchasedItemInfo, quantity, customerPurchase);
+		product = "cornflakes	35g";
+		CheckoutSystem.getProductPrice(product, allProducts, allPrices, purchasedItemInfo);
+		quantity = "5";
+		CheckoutSystem.addPurchasedProductToList(purchasedItemInfo, quantity, customerPurchase);
+		actual = CheckoutSystem.computeTotalCostOfItemsPurchased(customerPurchase).toString();
+		expected = "";
+		assertEquals(expected, actual);
 	}
 
 
