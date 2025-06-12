@@ -4,8 +4,10 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
+import java.util.Scanner;
 
 public class CheckoutSystem{
+
 
 	public static void setNameOfCustomer(String firstName, String lastName, String middleName, String[] customerInfo){
 		String concatAllNames;
@@ -31,23 +33,23 @@ public class CheckoutSystem{
 
 	public static String getProductPrice(String product, String[] allProducts, String[] allPrices, String[] purchasedItemInfo){
 
+		Scanner input = new Scanner(System.in);
+
 		Arrays.sort(allProducts);
 // Prices are arranged according to sorted order of products.
 
 		List<String> allProductsToList = Arrays.asList(allProducts);
+		List<String> productNameInfoIncomplete = new ArrayList<>();
 
 		int counter = 0;
 		int productIndex = 0;
-
-		String productNameInfoIncomplete = "";
 	
 		for(int index = 0; index < allProductsToList.size(); index++){
 			if(product.equalsIgnoreCase(allProductsToList.get(index)) || (allProductsToList.get(index).toLowerCase()).contains(product.toLowerCase())){
 				productIndex = index;
 				counter++;
 				if(counter >= 1){
-					productNameInfoIncomplete = productNameInfoIncomplete + counter + ". " + allProductsToList.get(index) + "	" + allPrices[productIndex] + "\n";
-
+					productNameInfoIncomplete.add(counter + ". " + allProductsToList.get(index));
 				}
 			}
 		}
@@ -55,11 +57,26 @@ public class CheckoutSystem{
 			purchasedItemInfo[0] = product;
 			purchasedItemInfo[2] = allPrices[productIndex];
 			
-			return "NGN " + purchasedItemInfo[2];
 		}
 		else{
-			return productNameInfoIncomplete;
-		}
+			for(String eachProduct : productNameInfoIncomplete){
+				System.out.println(eachProduct);
+			}
+			System.out.print("Select your option: ");
+			while(true){
+				int select = input.nextInt();
+				if(select >= 1 && select <= productNameInfoIncomplete.size()){
+					product = productNameInfoIncomplete.get(select - 1);
+					product = product.substring(product.indexOf(" ") + 1);
+					getProductPrice(product, allProducts, allPrices, purchasedItemInfo);
+					break;	
+				}
+				else{
+					System.out.println("Enter valid option number");
+				}
+				
+			}
+		}return purchasedItemInfo[2];
 		
 
 	}
@@ -81,11 +98,73 @@ public class CheckoutSystem{
 	}
 
 	public static BigDecimal computeTotalCostOfItemsPurchased(List<String[]> customerPurchase){
+
 		BigDecimal sum = new BigDecimal("0");
+		
+
 		for(String[] item : customerPurchase){
-			sum = sum.add(new BigDecimal(item[3]));	
+			sum = sum.add(new BigDecimal(item[3]));
+			
 		}
+	
 		return sum;
+	}
+
+	public static BigDecimal valueAddedTax(BigDecimal sum){
+
+		BigDecimal addedTax = (new BigDecimal("7.5").divide(new BigDecimal("100"))).multiply(sum);
+
+		return addedTax;
+
+	}
+
+
+	public static void main(String[] args){
+
+		Scanner input = new Scanner(System.in);
+		List<String[]> customerPurchase = new ArrayList<>();
+		String[] customerInfo = new String[1];
+		String[] storeInfo = {"SEMICOLON STORES", "MAIN BRANCH", "LOCATION: 312 HERBERT MACAULAY WAY, SABO YABA, LAGOS.", "TEL: 0823452776", null, "Cashier: Sojinu Sodiq", null}; 
+		String[] allProducts = {"Milk	50g", "Milk	25g", "Cornflakes	35g", "Cornflakes	15g", "Milo	20g", "Rice	50g", "Semolina	30g", "Frozen Chicken	20g", "Frozen chicken 	15g", "ChiActive	10g", "Ribena	8g"};
+
+//One tab spacing between product and size or between brand and name of product.
+
+		String[] allPrices = new String[] {"1700.00", "1200.00", "3000.00", "8000.00", "15700.00", "2200.00", "4200.00", "3500.00", "1100.00", "5450.00", "5800.00"};
+
+		boolean checkOut = true;
+		while(checkOut){
+			System.out.println("What is the customer's name?");
+			String firstName = input.next();
+			String lastName = input.next();
+			String middleName = input.next();
+			input.nextLine();
+			setNameOfCustomer(firstName, lastName, middleName, customerInfo);
+			storeInfo[4] = getCustomerName(customerInfo);
+			boolean checkItemBought = true;
+			while(checkItemBought){
+				String[] purchasedItemInfo = new String[4];
+				System.out.println("What did the customer buy?");
+				String product = input.nextLine();
+				System.out.println("How much per unit?");
+				System.out.println(getProductPrice(product,allProducts,allPrices,purchasedItemInfo));
+				System.out.println("How many pieces?");
+				String quantity = input.next();
+				System.out.println(addPurchasedProductToList(purchasedItemInfo, quantity, customerPurchase));
+				String yesOrNo = input.next();
+				input.nextLine();
+				switch(yesOrNo){
+					case "yes", "Yes":
+						break;
+					case "no":
+						checkItemBought = false; 
+						break;
+					default: 
+						System.out.println("Enter valid response!");
+				}
+
+
+			}
+		}
 	}
 
 }
