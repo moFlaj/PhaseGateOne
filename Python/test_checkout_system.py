@@ -50,11 +50,11 @@ class test_checkout_system(unittest.TestCase):
 	def test_get_customer_name_returns_first_letters_of_names_capitalized_if_names_are_valid(self):
 
 		set_customer_name(self.first_name, self.last_name, self.middle_name, self.customer_info)
-		self.assertEqual("Customer name: Adebola Folorunsho Ayomide", get_customer_name(self.customer_info))
+		self.assertEqual(get_customer_name(self.customer_info), "Customer name: Adebola Folorunsho Ayomide")
 
 	def test_get_product_price_returns_price_of_product_entered_if_size_is_included(self):
 		product = "milk 25g"
-		self.assertEqual("NGN 2200.00", get_product_price(product, self.all_products, self.all_prices, self.purchased_item_info))
+		self.assertEqual(get_product_price(product, self.all_products, self.all_prices, self.purchased_item_info), "NGN 2200.00")
 
 	def test_add_purchased_product_to_list_returns_successful_if_quantity_entered_is_a_valid_integer(self):
 		product = "milk 25g"
@@ -62,7 +62,7 @@ class test_checkout_system(unittest.TestCase):
 		quantity = "2"
 		actual = add_purchased_product_to_list(self.purchased_item_info, quantity, self.customer_purchase)
 		expected = "Product added successfully. Add more items?\nEnter Yes/No"
-		self.assertEqual(expected, actual)
+		self.assertEqual(actual, expected)
 
 	def test_add_purchased_product_to_list_throws_error_if_quantity_entered_is_not_a_valid_integer(self):
 		product = "milk 25g"
@@ -90,7 +90,7 @@ class test_checkout_system(unittest.TestCase):
 
 		actual = str(compute_total_cost_of_items_purchased(self.customer_purchase))
 		expected = "19400.00"
-		self.assertEqual(expected, actual)
+		self.assertEqual(actual, expected)
 
 	
 """	
