@@ -4,7 +4,10 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class CheckoutSystem{
 
@@ -28,71 +31,78 @@ public class CheckoutSystem{
 
 	public static String getCustomerName(String[] customerInfo){
 
-		return customerInfo[0];
+		return "Customer name: " + customerInfo[0];
 	}
 
-	public static String getProductPrice(String product, String[] allProducts, String[] allPrices, String[] purchasedItemInfo){
-
+	public static String returnProductIfDetected(String productInput, String[] allProducts){
+//This function searches items on the system. Search input may be complete name or incomplete.
 		Scanner input = new Scanner(System.in);
-
-		Arrays.sort(allProducts);
-// Prices are arranged according to sorted order of products.
 
 		List<String> allProductsToList = Arrays.asList(allProducts);
 		List<String> productNameInfoIncomplete = new ArrayList<>();
-
+		String productIfFound = "";
 		int counter = 0;
 		int productIndex = 0;
 	
 		for(int index = 0; index < allProductsToList.size(); index++){
-			if(product.equalsIgnoreCase(allProductsToList.get(index)) || (allProductsToList.get(index).toLowerCase()).contains(product.toLowerCase())){
+			if(productInput.equalsIgnoreCase(allProductsToList.get(index)) || (allProductsToList.get(index).toLowerCase()).contains(productInput.toLowerCase())){
 				productIndex = index;
 				counter++;
-				if(counter >= 1){
-					productNameInfoIncomplete.add(counter + ". " + allProductsToList.get(index));
-				}
+				productNameInfoIncomplete.add(counter + ". " + allProductsToList.get(index));
 			}
 		}
-		if(counter == 1){
-			purchasedItemInfo[0] = product;
-			purchasedItemInfo[2] = allPrices[productIndex];
-			
-		}
-		else{
-			for(String eachProduct : productNameInfoIncomplete){
-				System.out.println(eachProduct);
-			}
-			System.out.print("Select your option: ");
-			while(true){
-				int select = input.nextInt();
-				if(select >= 1 && select <= productNameInfoIncomplete.size()){
-					product = productNameInfoIncomplete.get(select - 1);
-					product = product.substring(product.indexOf(" ") + 1);
-					getProductPrice(product, allProducts, allPrices, purchasedItemInfo);
-					break;	
-				}
-				else{
-					System.out.println("Enter valid option number");
-				}
-				
-			}
-		}return purchasedItemInfo[2];
 		
+		for(String eachProductInSystem : productNameInfoIncomplete){
+			System.out.println(eachProductInSystem);
+		}
+		System.out.print("Select your option: ");
+		while(true){
+			int select = input.nextInt();
+			if(select >= 1 && select <= productNameInfoIncomplete.size()){
+				productIfFound = productNameInfoIncomplete.get(select - 1);
+				productIfFound = productIfFound.substring(productIfFound.indexOf(" ") + 1);
+				break;	
+			}
+			else{
+				System.out.println("Enter valid option number");
+			}
+				
+		}return productIfFound;
 
 	}
 
+	public static String getProductPrice(String product, String[] allProducts, String[] allPrices, String[] purchasedItemInfo){
+
+		List<String> allProductsToList = Arrays.asList(allProducts);
+
+		int productIndex = 0;
+	
+		for(int index = 0; index < allProductsToList.size(); index++){
+			if(product.equalsIgnoreCase(allProductsToList.get(index))){
+				purchasedItemInfo[0] = product;
+				purchasedItemInfo[2] = allPrices[index];
+				
+			}
+		}
+			
+		return  "NGN " + purchasedItemInfo[2];	
+
+	}
+
+
 	public static String addPurchasedProductToList(String[] purchasedItemInfo, String pieces, List<String[]> customerPurchase){
 		try{
-			Integer.parseInt(pieces);
+			int quantity = Integer.parseInt(pieces);
+			if(quantity < 1)throw new IllegalArgumentException("Quantity entered is not valid.");
 			purchasedItemInfo[1] = pieces;
 			BigDecimal totalPrice = new BigDecimal(purchasedItemInfo[2]).multiply(new BigDecimal(purchasedItemInfo[1]));
-			// System.out.println(totalPrice);
 			purchasedItemInfo[3] = totalPrice.toString();
 			customerPurchase.add(purchasedItemInfo);
-			return "Product added succesfully. Add more items?";
+			return "Product added succesfully. Add more items?\nEnter Yes/No";
 		}
-		catch(NumberFormatException error){
-			throw new IllegalArgumentException("Quantity entered is not valid.");
+
+		catch(NumberFormatException notAnInteger){
+			throw new IllegalArgumentException("Quantity entered is not a valid integer.");
 		}	
 
 	}
@@ -103,6 +113,7 @@ public class CheckoutSystem{
 		
 
 		for(String[] item : customerPurchase){
+			if(Arrays.equals(customerPurchase.get(0), item))continue;
 			sum = sum.add(new BigDecimal(item[3]));
 			
 		}
@@ -114,59 +125,146 @@ public class CheckoutSystem{
 
 		BigDecimal addedTax = (new BigDecimal("7.5").divide(new BigDecimal("100"))).multiply(sum);
 
-		return addedTax;
+		return addedTax.setScale(2, RoundingMode.HALF_UP);
+	}
+
+	public static void inVoiceDisplay(String[] storeInfo, List<String[]> customerPurchase, BigDecimal sum){
+
+		String[] receiptDesign = {"===============================================================", "--------------------------------------------------------------"};
+		int change = 0;
+		System.out.println();
+		for(int index = 0; index < storeInfo.length; index++){System.out.println(storeInfo[index]);}
+
+		for(String[] displayInvoice : customerPurchase){
+			System.out.println(receiptDesign[change]);
+			for(String itemInfo : displayInvoice){
+				System.out.print("\t" + itemInfo);
+				if(displayInvoice[0].equals(itemInfo))System.out.print("\t");
+				
+			}
+			System.out.println();
+			change = 1;	
+		}
+		System.out.println(receiptDesign[1]);
+		System.out.println("\t\tSum Total: " + sum);
+		System.out.println("\t\tVAT @ 7.5%: " + valueAddedTax(sum));
+		System.out.println(receiptDesign[0]);
+		System.out.println("\t\tBill Total: " + sum.add(valueAddedTax(sum)));
+		System.out.println(receiptDesign[0]);
+		System.out.println("THIS IS NOT A RECEIPT, KINDLY PAY " + sum.add(valueAddedTax(sum)));
+		System.out.println(receiptDesign[0]);
 
 	}
 
+	public static void receiptDisplay(BigDecimal sum, String customerPay, String[] storeInfo, List<String[]> customerPurchase){
+		try{
+			BigDecimal convertCustomerPay = new BigDecimal(customerPay);
+			
+			String[] receiptDesign = {"===============================================================", "--------------------------------------------------------------"};
+			int change = 0;
+			System.out.println();
+			for(int index = 0; index < storeInfo.length; index++){System.out.println(storeInfo[index]);}
 
-	public static void main(String[] args){
+			for(String[] displayInvoice : customerPurchase){
+				System.out.println(receiptDesign[change]);
+				for(String itemInfo : displayInvoice){
+					System.out.print("\t" + itemInfo);
+					if(displayInvoice[0].equals(itemInfo))System.out.print("\t");
+				
+				}
+				System.out.println();
+				change = 1;	
+			}
+		
+			System.out.println(receiptDesign[1]);
+			System.out.println("\t\tSum Total: " + sum);
+			System.out.println("\t\tVAT @ 7.5%: " + valueAddedTax(sum));
+			System.out.println(receiptDesign[0]);
+			System.out.println("\t\tBill Total: " + sum.add(valueAddedTax(sum)));
+			System.out.println("\t\tAmount paid: " + convertCustomerPay);
+			int lessThanRequired = convertCustomerPay.compareTo(sum.add(valueAddedTax(sum)));
+			int negativeAmountInput = convertCustomerPay.compareTo(new BigDecimal("0"));
+			if(lessThanRequired < 0 || negativeAmountInput < 0)throw new IllegalArgumentException("Invalid input. Enter right amount.");
+			System.out.println("\t\tBalance: " + convertCustomerPay.subtract(sum.add(valueAddedTax(sum))));
+			System.out.println(receiptDesign[0]);
+			System.out.println("\tTHANK YOU FOR YOUR PATRONAGE.");
+			System.out.println(receiptDesign[0]);
+
+		}catch(IllegalArgumentException invalidInput){
+			System.out.println(invalidInput);
+		}
+
+
+	}
+				
+
+/*	public static void main(String[] args){
 
 		Scanner input = new Scanner(System.in);
+		DateTimeFormatter ofFormat = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm:ss");
 		List<String[]> customerPurchase = new ArrayList<>();
+		customerPurchase.add(new String[]{"ITEM", "QTY", "PRICE", "TOTAL(NGN)"});
 		String[] customerInfo = new String[1];
-		String[] storeInfo = {"SEMICOLON STORES", "MAIN BRANCH", "LOCATION: 312 HERBERT MACAULAY WAY, SABO YABA, LAGOS.", "TEL: 0823452776", null, "Cashier: Sojinu Sodiq", null}; 
-		String[] allProducts = {"Milk	50g", "Milk	25g", "Cornflakes	35g", "Cornflakes	15g", "Milo	20g", "Rice	50g", "Semolina	30g", "Frozen Chicken	20g", "Frozen chicken 	15g", "ChiActive	10g", "Ribena	8g"};
-
-//One tab spacing between product and size or between brand and name of product.
-
+		String[] storeInfo = {"SEMICOLON STORES", "MAIN BRANCH", "LOCATION: 312 HERBERT MACAULAY WAY, SABO YABA, LAGOS.", "TEL: 0823452776", null, null, null}; 
+		String[] allProducts = { "ChiActive 10g", "Cornflakes 15g", "Cornflakes 35g", "Frozen chicken 15g", "Frozen Chicken 20g", "Milk 25g", "Milk 50g", "Milo 20g", "Ribena 8g", "Rice 50g", "Semolina 30g" };
 		String[] allPrices = new String[] {"1700.00", "1200.00", "3000.00", "8000.00", "15700.00", "2200.00", "4200.00", "3500.00", "1100.00", "5450.00", "5800.00"};
+
+// Prices are arranged according to sorted order of products.
 
 		boolean checkOut = true;
 		while(checkOut){
-			System.out.println("What is the customer's name?");
+			System.out.println("What is the customer's full name?");
 			String firstName = input.next();
 			String lastName = input.next();
 			String middleName = input.next();
 			input.nextLine();
 			setNameOfCustomer(firstName, lastName, middleName, customerInfo);
-			storeInfo[4] = getCustomerName(customerInfo);
+			storeInfo[6] =  getCustomerName(customerInfo);
 			boolean checkItemBought = true;
 			while(checkItemBought){
 				String[] purchasedItemInfo = new String[4];
 				System.out.println("What did the customer buy?");
-				String product = input.nextLine();
+				String productInput = input.nextLine();
+				productInput = returnProductIfDetected(productInput, allProducts);
 				System.out.println("How much per unit?");
-				System.out.println(getProductPrice(product,allProducts,allPrices,purchasedItemInfo));
+				System.out.println(getProductPrice(productInput,allProducts,allPrices,purchasedItemInfo));
 				System.out.println("How many pieces?");
 				String quantity = input.next();
-				System.out.println(addPurchasedProductToList(purchasedItemInfo, quantity, customerPurchase));
-				String yesOrNo = input.next();
-				input.nextLine();
-				switch(yesOrNo){
-					case "yes", "Yes":
-						break;
-					case "no":
+				String continueAddingItems = addPurchasedProductToList(purchasedItemInfo, quantity, customerPurchase);
+				boolean continueAdding = true;
+				while(continueAdding){
+					System.out.println(continueAddingItems);
+					String yesOrNo = input.next();
+					input.nextLine();
+					if("Yes".equalsIgnoreCase(yesOrNo))continueAdding = false;
+					else if("No".equalsIgnoreCase(yesOrNo)){
+
+						continueAdding = false;
 						checkItemBought = false; 
-						break;
-					default: 
+						checkOut = false;
+					}
+					else{
 						System.out.println("Enter valid response!");
+					}
+						
 				}
-
-
+				
 			}
+				BigDecimal sumTotalCostOfItems = computeTotalCostOfItemsPurchased(customerPurchase);
+				System.out.println("Full name of cashier?");
+				firstName = input.next();
+				lastName = input.next();
+				middleName = input.next();
+				storeInfo[5] = "Cashier: " + firstName.substring(0,1).toUpperCase() + firstName.substring(1) + " " + lastName.substring(0,1).toUpperCase() + lastName.substring(1) + " " + middleName.substring(0,1).toUpperCase() + middleName.substring(1);
+				LocalDateTime dateAndCurrentTime = LocalDateTime.now();
+				storeInfo[4] = "Date: " + dateAndCurrentTime.format(ofFormat);
+				inVoiceDisplay(storeInfo, customerPurchase, sumTotalCostOfItems);
+				System.out.println("How much did customer pay?");
+				String customerPay = input.next();
+				receiptDisplay(sumTotalCostOfItems, customerPay, storeInfo, customerPurchase);
 		}
-	}
 
+	} */
 }
 
 
