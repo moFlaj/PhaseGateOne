@@ -30,10 +30,19 @@ public class StudentGrade{
 			eachStudent[noOfSubjects + 1] = total/noOfSubjects;
 			System.out.println("Saving >>>>>>>>>>>>>>>>\nSaved successfully");
 			studentCounter++;
-		}
-		System.out.println(Arrays.deepToString(allStudents));
+		}	
 	}
+	public static void postionOfStudents(double[][] allStudents){
 
+		List<Integer> averageScoresOfEachStudent = new ArrayList<>();
+
+		for(double[] eachStudent : allStudents){
+
+			averageScoresOfEachStudent.add(eachStudent[eachStudent.length - 2]);
+
+		}
+	
+	}
 
 
 
