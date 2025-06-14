@@ -1,9 +1,12 @@
 import java.util.Scanner;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
 
 public class StudentGrade{
 
-	public static void inputStudentScores(double[][] allStudents, int noOfStudents, int noOfSubjects){
+	public static double[][] inputStudentScores(double[][] allStudents, int noOfStudents, int noOfSubjects){
 		Scanner input = new Scanner(System.in);
  		int studentCounter = 1;
 		allStudents = new double[noOfStudents][noOfSubjects + 3];
@@ -30,34 +33,37 @@ public class StudentGrade{
 			eachStudent[noOfSubjects + 1] = total/noOfSubjects;
 			System.out.println("Saving >>>>>>>>>>>>>>>>\nSaved successfully");
 			studentCounter++;
-		}	
+		}
+		return allStudents;
 	}
+
 	public static void postionOfStudents(double[][] allStudents){
 
 		List<Double> averageScoresOfEachStudent = new ArrayList<>();
 
 		for(double[] eachStudent : allStudents){
-			averageScoresOfEachStudent.add(eachStudent[eachStudent.length - 2]);
+
+			averageScoresOfEachStudent.add(eachStudent[eachStudent.length - 2]); //adds each student average score to a list.
 		}
-		Collections.sort(averageScoresOfEachStudent, Collections.reverseOrder());
-		int counter = 1;
-		List<Double[]> indexHasPosition = new ArrayList<>();
+
+		Collections.sort(averageScoresOfEachStudent, Collections.reverseOrder()); //To sort the all students average score in descending order.
+
+		List<double[]> studentHasPosition = new ArrayList<>();
 
 		for(double[] eachStudent : allStudents){
 
 			for(int highestToLowest = 0; highestToLowest < averageScoresOfEachStudent.size(); highestToLowest++){
 		
-				if(eachStudent[eachStudent.length - 2] == averageScoresOfEachStudent.get(highestToLowest) && ){
+				if(eachStudent[eachStudent.length - 2] == averageScoresOfEachStudent.get(highestToLowest) && !studentHasPosition.contains(eachStudent)){
 
-					eachStudent[eachStudent.length - 1] = highestToLowest + 1;		
+					eachStudent[eachStudent.length - 1] = highestToLowest + 1;	
+					studentHasPosition.add(eachStudent);
 
 				}
 			}
-
-
 		}
+		System.out.println(Arrays.deepToString(allStudents));
 	}
-
 
 
 	public static void main(String[] args){
@@ -67,7 +73,7 @@ public class StudentGrade{
 		System.out.println("How many subjects do they offer?");
 		int noOfSubjects = input.nextInt();
 		double[][] allStudents = {{}};
-		inputStudentScores(allStudents, noOfStudents, noOfSubjects);
+		postionOfStudents(inputStudentScores(allStudents, noOfStudents, noOfSubjects));
 
 	}
 
