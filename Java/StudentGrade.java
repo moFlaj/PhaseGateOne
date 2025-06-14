@@ -3,18 +3,21 @@ import java.util.Arrays;
 
 public class StudentGrade{
 
-	public static void inputStudentScores(int[][] allStudents, int noOfStudents, int noOfSubjects){
+	public static void inputStudentScores(double[][] allStudents, int noOfStudents, int noOfSubjects){
 		Scanner input = new Scanner(System.in);
  		int studentCounter = 1;
-		allStudents = new int[noOfStudents][noOfSubjects + 3];
+		allStudents = new double[noOfStudents][noOfSubjects + 3];
 
-		for(int[] eachStudent : allStudents){
+		for(double[] eachStudent : allStudents){
+			double total = 0;
 			System.out.println("Entering score for student " + studentCounter);
 			for(int subjectScore = 0; subjectScore < noOfSubjects; subjectScore++){
 				while(true){
 					System.out.println("Entering score for subject " + (subjectScore + 1));
-					int score = input.nextInt();
+					double score = input.nextDouble();
+
 					if(100 >= score && score >= 0){
+						total+=score;
 						eachStudent[subjectScore] = score;
 						break;
 					}
@@ -23,11 +26,12 @@ public class StudentGrade{
 					}
 				}
 			}	
-			
+			eachStudent[noOfSubjects] = total;
+			eachStudent[noOfSubjects + 1] = total/noOfSubjects;
 			System.out.println("Saving >>>>>>>>>>>>>>>>\nSaved successfully");
 			studentCounter++;
 		}
-
+		System.out.println(Arrays.deepToString(allStudents));
 	}
 
 
@@ -39,7 +43,7 @@ public class StudentGrade{
 		int noOfStudents = input.nextInt();
 		System.out.println("How many subjects do they offer?");
 		int noOfSubjects = input.nextInt();
-		int[][] allStudents = {{}};
+		double[][] allStudents = {{}};
 		inputStudentScores(allStudents, noOfStudents, noOfSubjects);
 
 	}
