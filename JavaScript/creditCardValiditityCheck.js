@@ -24,9 +24,9 @@ function checkCreditCardType(cardNumber){
 		else{
 			throw new Error("Issuer is unknown");
 		}
-		}else{
-			throw new Error("Invalid length");
-		}
+	}else{
+		throw new Error("Invalid length");
+	}
 
 	return "Credit Card Type: " + cardType;
 }
