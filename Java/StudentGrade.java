@@ -34,14 +34,28 @@ public class StudentGrade{
 	}
 	public static void postionOfStudents(double[][] allStudents){
 
-		List<Integer> averageScoresOfEachStudent = new ArrayList<>();
+		List<Double> averageScoresOfEachStudent = new ArrayList<>();
+
+		for(double[] eachStudent : allStudents){
+			averageScoresOfEachStudent.add(eachStudent[eachStudent.length - 2]);
+		}
+		Collections.sort(averageScoresOfEachStudent, Collections.reverseOrder());
+		int counter = 1;
+		List<Integer> indexHasPosition = new ArrayList<>();
 
 		for(double[] eachStudent : allStudents){
 
-			averageScoresOfEachStudent.add(eachStudent[eachStudent.length - 2]);
+			for(int highestToLowest = 0; highestToLowest < averageScoresOfEachStudent.size(); highestToLowest++){
+		
+				if(eachStudent[eachStudent.length - 2] == averageScoresOfEachStudent.get(highestToLowest) && ){
+
+					eachStudent[eachStudent.length - 1] = highestToLowest + 1;		
+
+				}
+			}
+
 
 		}
-	
 	}
 
 
