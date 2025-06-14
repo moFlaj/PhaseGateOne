@@ -41,7 +41,7 @@ public class StudentGrade{
 		}
 		Collections.sort(averageScoresOfEachStudent, Collections.reverseOrder());
 		int counter = 1;
-		List<Integer> indexHasPosition = new ArrayList<>();
+		List<Double[]> indexHasPosition = new ArrayList<>();
 
 		for(double[] eachStudent : allStudents){
 
