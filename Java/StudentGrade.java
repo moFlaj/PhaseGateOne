@@ -62,7 +62,6 @@ public class StudentGrade{
 				}
 			}
 		}
-		System.out.println(Arrays.deepToString(allStudents));
 	}
 
 
