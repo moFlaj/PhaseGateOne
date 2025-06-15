@@ -3,7 +3,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
-import java.math.BigDecimal;
 
 public class StudentGrade{
 
@@ -83,7 +82,7 @@ public class StudentGrade{
 			System.out.print(eachHeader + "\t");
 			if(header[0] == eachHeader)System.out.print("\t");
 		}
-		System.out.print("\n================================================\n");
+		System.out.print("\n==============================================================================================\n");
 		int studentCounter = 1;
 
 		for(double[] eachStudentAndScores : allStudents){
@@ -98,8 +97,60 @@ public class StudentGrade{
 			System.out.println();
 		}
 
-		System.out.println("===================================================");
-		System.out.println("===================================================");
+		System.out.println("==========================================================================================");
+		System.out.println("==========================================================================================");
+
+
+	}
+
+	public static void subjectSummary(double[][] allStudents, int noOfSubjects, int noOfStudents){
+
+		double highest = Integer.MIN_VALUE;
+		double lowest = Integer.MAX_VALUE;
+		int indexOfHighest = 0;
+		int highestScoringStudent = 0;
+		int indexOfLowest = 0;
+		int lowestScoringStudent = 0;
+		double sumSubjectTotal = 0;
+		int countNoOfPasses = 0;
+		int countNoOfFailures = 0;
+		
+
+		for(int eachSubjectIndex = 0; eachSubjectIndex < noOfSubjects; eachSubjectIndex++){
+
+			for(double[] eachStudentScoreInSubject : allStudents){
+			
+				if(eachStudentScoreInSubject[eachSubjectIndex] > highest){
+					highest = eachStudentScoreInSubject[eachSubjectIndex];
+					highestScoringStudent = indexOfHighest + 1;
+				}
+				else if(eachStudentScoreInSubject[eachSubjectIndex] < lowest){
+					lowest = eachStudentScoreInSubject[eachSubjectIndex];
+					lowestScoringStudent = indexOfLowest + 1;
+				}
+
+				if(eachStudentScoreInSubject[eachSubjectIndex] >= 50)countNoOfPasses++;
+				else{countNoOfFailures++;}
+
+				sumSubjectTotal += eachStudentScoreInSubject[eachSubjectIndex];
+				indexOfHighest++;
+				indexOfLowest++;
+			}
+			
+			System.out.printf("Subject %d%n", (eachSubjectIndex + 1));
+			System.out.printf("Highest scoring student is: Student %d scoring %2f.%n", highestScoringStudent, highest);
+			System.out.printf("Lowest scoring student is: Student %d scoring %2f.%n", lowestScoringStudent, lowest);
+			System.out.printf("Total score is: %.2f.%n", sumSubjectTotal);
+			System.out.printf("Average score is: %.2f.%n", (sumSubjectTotal/noOfStudents));
+			System.out.printf("Number of passes: %d.%n", countNoOfPasses);
+			System.out.printf("Number of failures: %d.%n", countNoOfFailures);
+			countNoOfFailures = 0;
+			countNoOfPasses = 0;
+			sumSubjectTotal = 0;
+			indexOfHighest = 0;
+			indexOfLowest = 0;
+
+		}
 
 
 	}
@@ -112,7 +163,12 @@ public class StudentGrade{
 		System.out.println("How many subjects do they offer?");
 		int noOfSubjects = input.nextInt();
 		double[][] allStudents = {{}};
-		displayRecordSheet(postionOfStudents(inputStudentScores(allStudents, noOfStudents, noOfSubjects)), noOfSubjects);
-
+		allStudents = inputStudentScores(allStudents, noOfStudents, noOfSubjects);
+		allStudents =  postionOfStudents(allStudents);
+		displayRecordSheet(allStudents, noOfSubjects);
+		subjectSummary(allStudents, noOfSubjects, noOfStudents);
+		
 	}
+
+
 }
