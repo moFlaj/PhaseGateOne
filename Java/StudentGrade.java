@@ -3,6 +3,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
+import java.math.BigDecimal;
 
 public class StudentGrade{
 
@@ -16,7 +17,7 @@ public class StudentGrade{
 			System.out.println("Entering score for student " + studentCounter);
 			for(int subjectScore = 0; subjectScore < noOfSubjects; subjectScore++){
 				while(true){
-					System.out.println("Entering score for subject " + (subjectScore + 1));
+					System.out.println("Enter score for subject " + (subjectScore + 1));
 					double score = input.nextDouble();
 
 					if(100 >= score && score >= 0){
@@ -37,13 +38,13 @@ public class StudentGrade{
 		return allStudents;
 	}
 
-	public static void postionOfStudents(double[][] allStudents){
+	public static double[][] postionOfStudents(double[][] allStudents){
 
 		List<Double> averageScoresOfEachStudent = new ArrayList<>();
 
 		for(double[] eachStudent : allStudents){
 
-			averageScoresOfEachStudent.add(eachStudent[eachStudent.length - 2]); //adds each student average score to a list.
+			averageScoresOfEachStudent.add(eachStudent[eachStudent.length - 2]); //adds each studen average score to a list.
 		}
 
 		Collections.sort(averageScoresOfEachStudent, Collections.reverseOrder()); //To sort the all students average score in descending order.
@@ -62,6 +63,45 @@ public class StudentGrade{
 				}
 			}
 		}
+		return allStudents;
+	}
+
+	public static void displayRecordSheet(double[][] allStudents, int noOfSubjects){
+
+		System.out.println("===============================================");
+
+		String[] header = new String[allStudents[0].length + 1];
+		header[0] = "STUDENT";
+		for(int index = 1; index <= noOfSubjects; index++){	
+			header[index] = "SUB" + index;
+		}
+		header[header.length - 1] = "POS";
+		header[header.length - 2] = "AVE";
+		header[header.length - 3] = "TOTAL";
+		
+		for(String eachHeader : header){
+			System.out.print(eachHeader + "\t");
+			if(header[0] == eachHeader)System.out.print("\t");
+		}
+		System.out.print("\n================================================\n");
+		int studentCounter = 1;
+
+		for(double[] eachStudentAndScores : allStudents){
+			System.out.print("Student " + studentCounter + "\t");
+			for(double printEach : eachStudentAndScores){
+				if(eachStudentAndScores[eachStudentAndScores.length - 1] == printEach)System.out.print((int)printEach);
+				else if(eachStudentAndScores[eachStudentAndScores.length - 2] == printEach)System.out.printf("%.2f\t", printEach);
+				else{System.out.print(printEach + "\t");}
+
+			}
+			studentCounter++;
+			System.out.println();
+		}
+
+		System.out.println("===================================================");
+		System.out.println("===================================================");
+
+
 	}
 
 
@@ -72,10 +112,7 @@ public class StudentGrade{
 		System.out.println("How many subjects do they offer?");
 		int noOfSubjects = input.nextInt();
 		double[][] allStudents = {{}};
-		postionOfStudents(inputStudentScores(allStudents, noOfStudents, noOfSubjects));
+		displayRecordSheet(postionOfStudents(inputStudentScores(allStudents, noOfStudents, noOfSubjects)), noOfSubjects);
 
 	}
-
-
-
 }
