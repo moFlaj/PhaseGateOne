@@ -30,3 +30,5 @@ public class Task5{
 			System.out.print(" "); 
 		}
 		System.out.println();
+	}
+}
