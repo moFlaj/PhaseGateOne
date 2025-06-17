@@ -1,6 +1,7 @@
 const prompt = require('prompt-sync')();
 
 function addContact(firstName, lastName, phoneNumber, contactToBeAdded, phoneBook) {
+
 	BigInt(phoneNumber); 
 
 	if (phoneNumber.length < 11) throw new Error("Enter complete phone number.");
@@ -26,6 +27,7 @@ function removeContact(name, phoneBook) {
 	}
 
 function findContactByPhoneNumber(phoneNumber, phoneBook) {
+
 	BigInt(phoneNumber); // checkPhoneNumber
 	let foundContact = [];
 
@@ -103,145 +105,186 @@ let phoneBookMenu = `
 7. Exit
 `;
 
-while (phoneBookRunner) {
+while(phoneBookRunner){
 	console.log(phoneBookMenu);
 	let select = prompt();
 
-	switch (select) {
+	switch(select){
 		case "1":
-		let addContact = true;
-		while (addContact) {
-			let contactToBeAdded = ["", ""];
- 			firstName = "Adebola";
-  			lastName = "Foley";
-			phoneNumber = "08103195663";
-			phoneBook = addContact(firstName, lastName, phoneNumber, contactToBeAdded, phoneBook);
-			let backTo = true;
-			while (backTo) {
-				console.log("Enter 0 to return");
-				let backToLastPage = prompt();
-				switch (backToLastPage) {
+		let add = true;
+		while(add){
+			try{
+				let contactToBeAdded = ["", ""];
+ 				firstName = prompt('Enter first name: ');
+  				lastName = prompt('Enter last name: ');
+				phoneNumber = prompt('Enter eleven digit phone number: ')
+				phoneNoLengthAfter = phoneBook.length + 1
+				phoneBook = addContact(firstName, lastName, phoneNumber, contactToBeAdded, phoneBook);
+
+			}catch(invalidInput){
+				console.log(invalidInput.message)
+			}
+			if(phoneBook.length == phoneNoLengthAfter){
+				let backTo = true;
+				while(backTo){
+					console.log("Enter 0 to return or 1 to add another contact.");
+					let backToLastPage = prompt();
+					switch(backToLastPage){
+						case "0":
+							add = false
+  							backTo = false
+							break;
+						case "1":
+							backTo = false;
+							break;
+ 						default:
+							console.log("Invalid input.");
+					}
+				}
+			}else{continue;}
+		}
+			break;
+
+		case "2":
+			try{
+				fullName = prompt();
+				phoneBook = removeContact(fullName, phoneBook);
+			}
+			catch(err){
+				console.log(err.message);
+			}
+
+                	let backTo = true;
+                	while(backTo){
+                    		console.log("Enter 0 to return");
+                    		let backToLastPage = prompt();
+				switch(backToLastPage){
 					case "0":
-						addContact = false;
-  						backTo = false;
+						backTo = false;
 						break;
- 					default:
+					default:
 						console.log("Invalid input.");
 				}
 			}
-		}
-            break;
 
-	case "2":
-            let removeCon = true;
-            while (removeCon) {
-                fullName = "Adebola Foley";
-                phoneBook = removeContact(fullName, phoneBook);
-                let backTo = true;
-                while (backTo) {
-                    console.log("Enter 0 to return");
-                    let backToLastPage = prompt();
-                    switch (backToLastPage) {
-                        case "0":
-                            removeCon = false;
-                            backTo = false;
-                            break;
-                        default:
-                            console.log("Invalid input.");
-                    }
-                }
-            }
-            break;
+			break;
 
-        case "3":
-            let findContactByNumber = true;
-            while (findContactByNumber) {
-                phoneNumber = "08103195663";
-                console.log(findContactByPhoneNumber(phoneNumber, phoneBook));
-                let backTo = true;
-                while (backTo) {
-                    console.log("Enter 0 to return");
-                    let backToLastPage = prompt();
-                    switch (backToLastPage) {
-                        case "0":
-                            findContactByNumber = false;
-                            backTo = false;
-                            break;
-                        default:
-                            console.log("Invalid input.");
-                    }
-                }
-            }
-            break;
+		case "3":
+			let findContactByNumber = true;
+			while (findContactByNumber){
+				try{
+					phoneNumber = "08103195663";
+					console.log(findContactByPhoneNumber(phoneNumber, phoneBook));
+				}
+				catch(err){
+					console.log(err.message);
+				}
+				let backTo = true;
+				while(backTo){
+					console.log("Enter 0 to return or 1 to search again");
+					let backToLastPage = prompt();
+                    			switch(backToLastPage){
+						case "0":
+							findContactByNumber = false;
+							backTo = false;
+							break;
+						case "1":
+							backTo = false;
+							break;
+						default:
+							console.log("Invalid input.");
+					}
+                		}
+			}
+			break;
 
-        case "4":
-            let findContactByFirst = true;
-            while (findContactByFirst) {
-                firstName = "Adebola";
-                console.log(findContactByFirstName(firstName, phoneBook));
-                let backTo = true;
-                while (backTo) {
-                    console.log("Enter 0 to return");
-                    let backToLastPage = prompt();
-                    switch (backToLastPage) {
-                        case "0":
-                            findContactByFirst = false;
-                            backTo = false;
-                            break;
-                        default:
-                            console.log("Invalid input.");
-                    }
-                }
-            }
-            break;
+		case "4":
+			let findContactByFirst = true;
+			while(findContactByFirst){
+				try{
+					firstName = prompt();
+					console.log(findContactByFirstName(firstName, phoneBook));
+				}catch(err){
+					console.log(err.message);
+				}
+				let backTo = true;
+				while(backTo){
+					console.log("Enter 0 to return or 1 to search again");
+					let backToLastPage = prompt();
+					switch(backToLastPage){
+						case "0":
+							findContactByFirst = false;
+							backTo = false;
+							break;
 
-        case "5":
-            let findContactByLast = true;
-            while (findContactByLast) {
-                lastName = "Foley";
-                console.log(findContactByLastName(lastName, phoneBook));
-                let backTo = true;
-                while (backTo) {
-                    console.log("Enter 0 to return");
-                    let backToLastPage = prompt();
-                    switch (backToLastPage) {
-                        case "0":
-                            findContactByLast = false;
-                            backTo = false;
-                            break;
-                        default:
-                            console.log("Invalid input.");
-                    }
-                }
-            }
-            break;
+						case "1":
+							backTo = false;
+							break;
+						
+						default:
+							console.log("Invalid input.");
+					}
+				}
+			}
+			break;
 
-        case "6":
-            let editCon = true;
-            while (editCon) {
-                fullName = "Adebola Foley";
-                phoneBook = editContact(fullName, phoneBook);
-                let backTo = true;
-                while (backTo) {
-                    console.log("Enter 0 to return");
-                    let backToLastPage = prompt();
-                    switch (backToLastPage) {
-                        case "0":
-                            editCon = false;
-                            backTo = false;
-                            break;
-                        default:
-                            console.log("Invalid input.");
-                    }
-                }
-            }
-            break;
+		case "5":
+			let findContactByLast = true;
+			while(findContactByLast){
+				try{
+					lastName = prompt();
+					console.log(findContactByLastName(lastName, phoneBook));
+				}catch(err){
+					console.log(err.message);
+				}
+				let backTo = true;
+				while(backTo){
+					console.log("Enter 0 to return or 1 to search again");
+					let backToLastPage = prompt();
+					switch(backToLastPage){
+						case "0":
+							findContactByLast = false;
+							backTo = false;
+							break;
 
-        case "7":
-            phoneBookRunner = false;
-            break;
+						case "1":
+							backTo = false;
+							break;
+						
+						default:
+							console.log("Invalid input.");
+					}
+				}
+			}
 
-        default:
-            console.log("Invalid input.");
-    }
+			break;
+
+		case "6":
+			let editCon = true;
+			while(editCon){
+				fullName = "Adebola Foley";
+				phoneBook = editContact(fullName, phoneBook);
+				let backTo = true;
+				while (backTo){
+					console.log("Enter 0 to return");
+					let backToLastPage = prompt();
+					switch(backToLastPage){
+						case "0":
+							editCon = false;
+							backTo = false;
+							break;
+						default:
+							console.log("Invalid input.");
+					}
+				}
+			}
+			break;
+
+		case "7":
+			phoneBookRunner = false;
+			break;
+
+		default:
+			console.log("Invalid input.");
+	}
 }
