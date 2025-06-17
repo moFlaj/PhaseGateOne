@@ -21,3 +21,6 @@ public class Task4{
 		for(int counter = 4; counter <= 10; counter+=4){
 			System.out.println(counter);
 		}
+
+	}
+}
