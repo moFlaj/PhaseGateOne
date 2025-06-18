@@ -13,9 +13,9 @@ public class StudentGrade{
 
 		for(double[] eachStudent : allStudents){
 			double total = 0;
-			System.out.println("Entering score for student " + studentCounter);
 			for(int subjectScore = 0; subjectScore < noOfSubjects; subjectScore++){
 				while(true){
+					System.out.println("Entering score for student " + studentCounter);
 					System.out.println("Enter score for subject " + (subjectScore + 1));
 					double score = input.nextDouble();
 
@@ -103,20 +103,19 @@ public class StudentGrade{
 
 	}
 
-	public static void subjectSummary(double[][] allStudents, int noOfSubjects, int noOfStudents){
-
-		double highest = Integer.MIN_VALUE;
-		double lowest = Integer.MAX_VALUE;
-		int indexOfHighest = 0;
-		int highestScoringStudent = 0;
-		int indexOfLowest = 0;
-		int lowestScoringStudent = 0;
-		double sumSubjectTotal = 0;
-		int countNoOfPasses = 0;
-		int countNoOfFailures = 0;
-		
+	public static void subjectSummary(double[][] allStudents, int noOfSubjects, int noOfStudents){		
 
 		for(int eachSubjectIndex = 0; eachSubjectIndex < noOfSubjects; eachSubjectIndex++){
+
+			double highest = Integer.MIN_VALUE;
+			double lowest = Integer.MAX_VALUE;
+			int indexOfHighest = 0;
+			int highestScoringStudent = 0;
+			int indexOfLowest = 0;
+			int lowestScoringStudent = 0;
+			double sumSubjectTotal = 0;
+			int countNoOfPasses = 0;
+			int countNoOfFailures = 0;
 
 			for(double[] eachStudentScoreInSubject : allStudents){
 			
@@ -144,12 +143,7 @@ public class StudentGrade{
 			System.out.printf("Average score is: %.2f.%n", (sumSubjectTotal/noOfStudents));
 			System.out.printf("Number of passes: %d.%n", countNoOfPasses);
 			System.out.printf("Number of failures: %d.%n", countNoOfFailures);
-			countNoOfFailures = 0;
-			countNoOfPasses = 0;
-			sumSubjectTotal = 0;
-			indexOfHighest = 0;
-			indexOfLowest = 0;
-
+	
 		}
 
 
